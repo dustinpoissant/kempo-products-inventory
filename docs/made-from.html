@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Made from - Kempo Products Inventory</title>
+  <meta name="description" content="Connects kempo-products to kempo-inventory: selling a product uses up the materials it is made from, and stock follows what is on the shelf." />
+  <link rel="icon" type="image/svg+xml" href="./media/icon.svg" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/kempo-css@2/dist/kempo.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/kempo-css@2/dist/kempo-hljs.min.css" />
+  <script>
+    window.kempo = {
+      pathToStylesheet: 'https://cdn.jsdelivr.net/npm/kempo-css@2/dist/kempo.min.css',
+      pathsToIcons: ['https://cdn.jsdelivr.net/npm/kempo-ui@0.5/icons']
+    };
+  </script>
+  <style>
+    [id] { scroll-margin-top: 5rem; }
+  </style>
+  
+
+</head>
+<body>
+  
+  <k-nav fixed class="bg-primary">
+    <button id="toggleNavSideMenu" class="link" aria-label="Menu">
+      <k-icon name="menu"></k-icon>
+    </button>
+    <a href="./" class="d-if ph" style="align-items: center">
+      <img src="./media/icon-white.svg" alt="" class="pr" width="28" height="28" />
+      Kempo Products Inventory
+    </a>
+    <a href="./made-from.html" class="m-d-n">Made from</a>
+    <a href="./selling.html" class="m-d-n">Selling</a>
+    <a href="./reference.html" class="m-d-n">Reference</a>
+    <div class="flex"></div>
+    <a href="https://www.npmjs.com/package/kempo-products-inventory" target="_blank" aria-label="npm"><k-icon name="npm"></k-icon></a>
+    <a href="https://github.com/dustinpoissant/kempo-products-inventory" target="_blank" aria-label="GitHub"><k-icon name="github-mark"></k-icon></a>
+    <k-theme-switcher
+      class="mr"
+      style="
+        --padding: 0.5rem;
+        --c_active: var(--tc_on_primary);
+        --tc_active: var(--c_primary);
+        --c_inactive__hover: rgba(255, 255, 255, 0.1);
+      "
+    ></k-theme-switcher>
+  </k-nav>
+  <k-nav-spacer></k-nav-spacer>
+  <k-aside id="navSideMenu" main="overlay" state="offscreen">
+    <menu>
+      <div class="ta-center bb mb r0">
+        <h1 class="tc-primary">Kempo Products Inventory</h1>
+      </div>
+      <h5><a href="./">Overview</a></h5>
+      <div class="ml mb -mt">
+        <a href="./#what-it-does" class="d-b">What it does</a>
+        <a href="./#install" class="d-b">Install</a>
+        <a href="./#quick-start" class="d-b">Quick start</a>
+        <a href="./#how-it-fits" class="d-b">How it fits together</a>
+      </div>
+      <h5><a href="./made-from.html">Made from</a></h5>
+      <div class="ml mb -mt">
+        <a href="./made-from.html#panel" class="d-b">The Made from panel</a>
+        <a href="./made-from.html#choices" class="d-b">Only with one choice</a>
+        <a href="./made-from.html#units" class="d-b">Units</a>
+        <a href="./made-from.html#from-item" class="d-b">Make product from an item</a>
+        <a href="./made-from.html#stock-managed" class="d-b">Stock is managed for you</a>
+      </div>
+      <h5><a href="./selling.html">Selling</a></h5>
+      <div class="ml mb -mt">
+        <a href="./selling.html#selling" class="d-b">Selling takes the materials</a>
+        <a href="./selling.html#stock-follows" class="d-b">Stock follows the materials</a>
+        <a href="./selling.html#shared" class="d-b">Shared materials</a>
+        <a href="./selling.html#restocking" class="d-b">Restocking</a>
+        <a href="./selling.html#reversing" class="d-b">Reversing a purchase</a>
+      </div>
+      <h5><a href="./problems.html">When something is wrong</a></h5>
+      <div class="ml mb -mt">
+        <a href="./problems.html#when" class="d-b">When it happens</a>
+        <a href="./problems.html#page" class="d-b">The Product Stock page</a>
+        <a href="./problems.html#deletes" class="d-b">Deleting an item</a>
+        <a href="./problems.html#repair" class="d-b">Repairing</a>
+      </div>
+      <h5><a href="./reference.html">Reference</a></h5>
+      <div class="ml mb -mt">
+        <a href="./reference.html#api" class="d-b">HTTP API</a>
+        <a href="./reference.html#listens" class="d-b">What it listens to</a>
+        <a href="./reference.html#uses" class="d-b">What it uses</a>
+        <a href="./reference.html#tables" class="d-b">Tables</a>
+        <a href="./reference.html#development" class="d-b">Development</a>
+      </div>
+      <hr />
+      <a href="https://www.npmjs.com/package/kempo-products-inventory" target="_blank"><k-icon name="npm"></k-icon> View on npm</a><br />
+      <a href="https://github.com/dustinpoissant/kempo-products-inventory" target="_blank"><k-icon name="github-mark"></k-icon> View on GitHub</a>
+    </menu>
+  </k-aside>
+  <script type="module">
+    document.getElementById('toggleNavSideMenu').addEventListener('click', async () => {
+      await window.customElements.whenDefined('k-aside');
+      document.getElementById('navSideMenu').toggle();
+    });
+    document.addEventListener('click', event => {
+      const link = event.target.closest('a[href^="#"]');
+      if(!link) return;
+      event.preventDefault();
+      const id = link.getAttribute('href').slice(1);
+      const target = document.getElementById(id);
+      if(!target) return;
+      target.scrollIntoView({ behavior: 'smooth' });
+      history.replaceState(null, '', `${location.pathname}${location.search}#${id}`);
+      document.getElementById('navSideMenu')?.hide?.();
+    });
+  </script>
+
+  <main>
+    <h1>Made from</h1>
+    
+    <h2 id="panel">The Made from panel</h2>
+    <p>Open a product in <strong>Products</strong>. The <strong>Made from</strong> panel lists the inventory items one unit of the product uses up. Add a row for each material, pick the inventory item, and enter how much one unit uses. Saving the product saves the links.</p>
+    <div class="mb">
+      <img src="./media/admin-made-from.png" alt="A product's Made from panel with rows for each material: the inventory item, the amount per unit, and when it applies." class="full b r" />
+      <small class="d-b tc-muted">A product with four materials. Black resin and TPU are always used; the paint depends on the colour chosen.</small>
+    </div>
+    <p>Only people with <code>products:update</code> and <code>kempo-inventory:items:read</code> can link materials. A product with no materials is untouched: its stock stays whatever you set, and selling it takes nothing from inventory.</p>
+
+    <h2 id="choices" class="mt">Only with one choice</h2>
+    <p>A material can apply <strong>always</strong>, or <strong>only when one choice of an option is selected</strong>. A model car with a Color option can use red paint for Red and blue paint for Blue, and the resin for every colour.</p>
+    <div class="mb">
+      <img src="./media/admin-options.png" alt="The Options section of a product in the products admin: a Color option with Red and Blue choices, each with its own price adjustment." class="full b r" />
+      <small class="d-b tc-muted">The Color option the paint rows above refer to. Options are set up in kempo-products.</small>
+    </div>
+    <ul>
+      <li>When a purchase is recorded, only the materials that match the choices bought are taken.</li>
+      <li>A choice is marked <strong>sold out</strong> when there is not enough of the materials it needs for one more, even if other colours are fine.</li>
+      <li>A link to a choice must name an option and a choice that exist on the product, or saving is refused.</li>
+    </ul>
+
+    <h2 id="units" class="mt">Units</h2>
+    <p>Inventory counts <strong>whole numbers with no unit</strong>. Pick the smallest sensible unit and keep every material in it: 175 g, not 0.175 kg; 20 ml, not 0.02 l. The amount per unit is also a whole number.</p>
+
+    <h2 id="from-item" class="mt">Make a product from an item</h2>
+    <p>For a piece you already made, open the item in the inventory admin and choose <strong>Make product from this item</strong>.</p>
+    <div class="mb">
+      <img src="./media/admin-inventory-item.png" alt="An inventory item's page with the Make product from this item panel under the item form." class="full b r" />
+      <small class="d-b tc-muted">The panel under an inventory item's form.</small>
+    </div>
+    <p>The new product form opens with the name filled in and the item already listed as its material, <strong>one for one</strong>, so the product's stock is the item's quantity. Fill in the price and the rest, and save. This panel exists because kempo-inventory lets another extension add to its item page; see <a href="https://dustinpoissant.github.io/kempo-inventory/extending.html#item-actions" target="_blank">Adding to the item page</a>.</p>
+
+    <h2 id="stock-managed" class="mt">Stock is managed for you</h2>
+    <p>A product made from inventory is marked as <strong>maintained by this extension</strong>. Its stock, and which choices are in stock, show as read-only in the products admin, so an edit there cannot be silently overwritten by the next recalculation.</p>
+    <p>To change such a product's stock, change the inventory it is made from. To take it back by hand, remove its materials and the product returns to normal stock handling.</p>
+  
+    <hr />
+    <p class="tc-muted small">kempo-products-inventory is open source under the MIT license. <a href="https://github.com/dustinpoissant/kempo-products-inventory" target="_blank">View it on GitHub</a>, or <a href="https://github.com/dustinpoissant/kempo-products-inventory/issues" target="_blank">report a problem</a>.</p>
+  </main>
+  <script type="module" src="https://cdn.jsdelivr.net/npm/kempo-ui@0.5/dist/components/Nav.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/npm/kempo-ui@0.5/dist/components/NavSpacer.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/npm/kempo-ui@0.5/dist/components/Aside.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/npm/kempo-ui@0.5/dist/components/Icon.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/npm/kempo-ui@0.5/dist/components/ThemeSwitcher.js"></script>
+  
+</body>
+</html>

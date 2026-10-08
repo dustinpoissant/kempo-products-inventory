@@ -1,0 +1,21 @@
+<page pageName="When something is wrong" title="When something is wrong - Kempo Products Inventory">
+  <content>
+    <h2 id="when">When it happens</h2>
+    <p>Normally nothing goes wrong, because a product refuses to sell more than the materials allow. But if stock was changed behind the system's back, for instance directly in the database, the materials for a purchase may not be there.</p>
+    <p>The purchase <strong>stands</strong>, because it already happened. The extension records a <strong>problem</strong> with the order reference and what was short, and recalculates the affected products so they show what is really left.</p>
+
+    <h2 id="page" class="mt">The Product Stock page</h2>
+    <p>Open <strong>Product Stock</strong> in the admin menu to see what is linked and what needs attention.</p>
+    <div class="mb">
+      <img src="./media/admin-product-stock.png" alt="The Product Stock page, listing linked products and the materials limiting each." class="full b r" />
+      <small class="d-b tc-muted">The Product Stock page.</small>
+    </div>
+    <p>Each problem can be dismissed once you have dealt with it.</p>
+
+    <h2 id="deletes" class="mt">Deleting an inventory item</h2>
+    <p>An inventory item that products are made from <strong>cannot be deleted</strong> until it is removed from them. The deletion is refused with a message naming the products, so a product is never left depending on something that no longer exists. Deleting a product forgets what it was made from.</p>
+
+    <h2 id="repair" class="mt">Repairing</h2>
+    <p><strong>Recalculate everything</strong> on the Product Stock page is the repair tool: it works out every linked product's stock again from the inventory as it is now. Use it after changing the database directly, or after restoring a backup.</p>
+  </content>
+</page>

@@ -1,0 +1,92 @@
+<fragment>
+  <k-nav fixed class="bg-primary">
+    <button id="toggleNavSideMenu" class="link" aria-label="Menu">
+      <k-icon name="menu"></k-icon>
+    </button>
+    <a href="./" class="d-if ph" style="align-items: center">
+      <img src="./media/icon-white.svg" alt="" class="pr" width="28" height="28" />
+      Kempo Products Inventory
+    </a>
+    <a href="./made-from.html" class="m-d-n">Made from</a>
+    <a href="./selling.html" class="m-d-n">Selling</a>
+    <a href="./reference.html" class="m-d-n">Reference</a>
+    <div class="flex"></div>
+    <a href="https://www.npmjs.com/package/kempo-products-inventory" target="_blank" aria-label="npm"><k-icon name="npm"></k-icon></a>
+    <a href="https://github.com/dustinpoissant/kempo-products-inventory" target="_blank" aria-label="GitHub"><k-icon name="github-mark"></k-icon></a>
+    <k-theme-switcher
+      class="mr"
+      style="
+        --padding: 0.5rem;
+        --c_active: var(--tc_on_primary);
+        --tc_active: var(--c_primary);
+        --c_inactive__hover: rgba(255, 255, 255, 0.1);
+      "
+    ></k-theme-switcher>
+  </k-nav>
+  <k-nav-spacer></k-nav-spacer>
+  <k-aside id="navSideMenu" main="overlay" state="offscreen">
+    <menu>
+      <div class="ta-center bb mb r0">
+        <h1 class="tc-primary">Kempo Products Inventory</h1>
+      </div>
+      <h5><a href="./">Overview</a></h5>
+      <div class="ml mb -mt">
+        <a href="./#what-it-does" class="d-b">What it does</a>
+        <a href="./#install" class="d-b">Install</a>
+        <a href="./#quick-start" class="d-b">Quick start</a>
+        <a href="./#how-it-fits" class="d-b">How it fits together</a>
+      </div>
+      <h5><a href="./made-from.html">Made from</a></h5>
+      <div class="ml mb -mt">
+        <a href="./made-from.html#panel" class="d-b">The Made from panel</a>
+        <a href="./made-from.html#choices" class="d-b">Only with one choice</a>
+        <a href="./made-from.html#units" class="d-b">Units</a>
+        <a href="./made-from.html#from-item" class="d-b">Make product from an item</a>
+        <a href="./made-from.html#stock-managed" class="d-b">Stock is managed for you</a>
+      </div>
+      <h5><a href="./selling.html">Selling</a></h5>
+      <div class="ml mb -mt">
+        <a href="./selling.html#selling" class="d-b">Selling takes the materials</a>
+        <a href="./selling.html#stock-follows" class="d-b">Stock follows the materials</a>
+        <a href="./selling.html#shared" class="d-b">Shared materials</a>
+        <a href="./selling.html#restocking" class="d-b">Restocking</a>
+        <a href="./selling.html#reversing" class="d-b">Reversing a purchase</a>
+      </div>
+      <h5><a href="./problems.html">When something is wrong</a></h5>
+      <div class="ml mb -mt">
+        <a href="./problems.html#when" class="d-b">When it happens</a>
+        <a href="./problems.html#page" class="d-b">The Product Stock page</a>
+        <a href="./problems.html#deletes" class="d-b">Deleting an item</a>
+        <a href="./problems.html#repair" class="d-b">Repairing</a>
+      </div>
+      <h5><a href="./reference.html">Reference</a></h5>
+      <div class="ml mb -mt">
+        <a href="./reference.html#api" class="d-b">HTTP API</a>
+        <a href="./reference.html#listens" class="d-b">What it listens to</a>
+        <a href="./reference.html#uses" class="d-b">What it uses</a>
+        <a href="./reference.html#tables" class="d-b">Tables</a>
+        <a href="./reference.html#development" class="d-b">Development</a>
+      </div>
+      <hr />
+      <a href="https://www.npmjs.com/package/kempo-products-inventory" target="_blank"><k-icon name="npm"></k-icon> View on npm</a><br />
+      <a href="https://github.com/dustinpoissant/kempo-products-inventory" target="_blank"><k-icon name="github-mark"></k-icon> View on GitHub</a>
+    </menu>
+  </k-aside>
+  <script type="module">
+    document.getElementById('toggleNavSideMenu').addEventListener('click', async () => {
+      await window.customElements.whenDefined('k-aside');
+      document.getElementById('navSideMenu').toggle();
+    });
+    document.addEventListener('click', event => {
+      const link = event.target.closest('a[href^="#"]');
+      if(!link) return;
+      event.preventDefault();
+      const id = link.getAttribute('href').slice(1);
+      const target = document.getElementById(id);
+      if(!target) return;
+      target.scrollIntoView({ behavior: 'smooth' });
+      history.replaceState(null, '', `${location.pathname}${location.search}#${id}`);
+      document.getElementById('navSideMenu')?.hide?.();
+    });
+  </script>
+</fragment>

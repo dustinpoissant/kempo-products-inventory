@@ -6,6 +6,8 @@ All notable changes to `kempo-products-inventory` are documented in this file.
 
 First release.
 
+- A **documentation site** (`docs-src/` built into `docs/` for GitHub Pages) with screenshots of the admin, and tests that keep it honest.
+
 Connects kempo-products to kempo-inventory.
 
 - A **Made from** panel on a product's form links it to inventory items, each with an amount per unit, optionally only when one choice of an option is selected (a colour uses its own paint).

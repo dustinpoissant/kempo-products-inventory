@@ -6,6 +6,8 @@ Connects [kempo-products](https://github.com/dustinpoissant/kempo-products) to [
 
 Neither of those extensions needs the other. Install this one when you use both. It has to be installed after they are: kempo refuses to enable it until both are.
 
+**Documentation: <https://dustinpoissant.github.io/kempo-products-inventory/>** (guides with screenshots, the API and the events).
+
 ## What it does
 
 You tell it what a product is made from. Open a product in **Products** and use the **Made from** panel:
@@ -83,3 +85,5 @@ DATABASE_URL=postgresql://kempo:kempo@localhost:5444/kempo_products_inventory_te
 ```
 
 The database tests run the whole chain with the real hooks registered: a purchase in kempo-products takes materials out of kempo-inventory, and products made from them follow. They skip themselves when no database is reachable and refuse to run unless its name ends in `_test`. **A green run with `SKIPPED` did not test the database.**
+
+The documentation site is written in `docs-src/` and built into `docs/` for GitHub Pages. Edit `docs-src/`, never `docs/`, then run `npm run docs:build` (`npm run docs:dev` serves it on port 4051). `tests/docs.test.js` fails on a broken link, anchor or image, or when `docs/` is out of date.

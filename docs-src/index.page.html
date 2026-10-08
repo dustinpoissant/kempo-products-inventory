@@ -1,0 +1,88 @@
+<page pageName="Kempo Products Inventory" title="Kempo Products Inventory">
+  <content>
+    <div class="ta-center mb">
+      <p>
+        <a href="https://github.com/dustinpoissant/kempo-products-inventory" class="btn primary mr" target="_blank">GitHub</a>
+        <a href="https://www.npmjs.com/package/kempo-products-inventory" class="btn" target="_blank">npm</a>
+      </p>
+      <p class="large">Sell a model car and the resin, paint and filament it is made from come out of stock automatically.</p>
+    </div>
+
+    <p>This connects <a href="https://dustinpoissant.github.io/kempo-products/" target="_blank">kempo-products</a> to <a href="https://dustinpoissant.github.io/kempo-inventory/" target="_blank">kempo-inventory</a>. Neither of those needs the other: a catalog can exist with no inventory, and an inventory with no products. Install this one when you use both.</p>
+
+    <div class="mb">
+      <img src="./media/admin-made-from.png" alt="A product's Made from panel in the products admin, listing the inventory items the product is made from with an amount of each per unit, and the choice each applies to." class="full b r" />
+      <small class="d-b tc-muted">The Made from panel on a product's form.</small>
+    </div>
+
+    <h2 id="what-it-does" class="mt">What it does</h2>
+    <p>You tell it what a product is made from. Open a product and use the <strong>Made from</strong> panel:</p>
+    <div class="table-wrapper mb">
+      <table>
+        <thead><tr><th>Product</th><th>Material</th><th>Per unit</th><th>Used</th></tr></thead>
+        <tbody>
+          <tr><td>Model car</td><td>Black resin</td><td>175</td><td>always</td></tr>
+          <tr><td>Model car</td><td>TPU filament</td><td>12</td><td>always</td></tr>
+          <tr><td>Model car</td><td>Red paint</td><td>20</td><td>only with Color: Red</td></tr>
+          <tr><td>Model car</td><td>Blue paint</td><td>20</td><td>only with Color: Blue</td></tr>
+          <tr><td>Keychain</td><td>Black resin</td><td>35</td><td>always</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Then, with no further setup:</p>
+    <ul>
+      <li><strong><a href="./selling.html#selling">Selling takes the materials.</a></strong> When a purchase is recorded, 175 g of resin, 12 g of TPU and 20 ml of the colour that was bought are taken from inventory, all together or not at all. Each inventory movement carries the order reference.</li>
+      <li><strong><a href="./selling.html#stock-follows">Stock follows the materials.</a></strong> Each product's stock is how many can be made from what is on hand, limited by the scarcest material. A colour is marked sold out when there is not enough of its paint for one more.</li>
+      <li><strong><a href="./selling.html#shared">Products that share materials stay honest.</a></strong> With 300 g of PLA and two products that each need 200 g, selling one leaves 100 g and <em>both</em> go out of stock.</li>
+      <li><strong><a href="./selling.html#restocking">Restocking brings them back.</a></strong> Receiving resin, or correcting a count, updates every product made from it straight away.</li>
+      <li><strong><a href="./selling.html#reversing">Reversing a purchase puts back exactly what it took</a></strong>, even if the materials were edited since.</li>
+    </ul>
+
+    <h2 class="mt">Where to start</h2>
+    <div class="d-g mb" style="grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr)); grid-auto-rows: auto auto; gap: var(--spacer);">
+      <a href="./made-from.html" class="card no-link" style="display: grid; grid-template-rows: subgrid; grid-row: span 2;">
+        <h3 class="tc-primary mt0">Made from</h3>
+        <p class="tc-muted">Link a product to its materials, per choice, and start a product from an item.</p>
+      </a>
+      <a href="./selling.html" class="card no-link" style="display: grid; grid-template-rows: subgrid; grid-row: span 2;">
+        <h3 class="tc-primary mt0">Selling</h3>
+        <p class="tc-muted">What happens to stock when something is sold, restocked or reversed.</p>
+      </a>
+      <a href="./problems.html" class="card no-link" style="display: grid; grid-template-rows: subgrid; grid-row: span 2;">
+        <h3 class="tc-primary mt0">When something is wrong</h3>
+        <p class="tc-muted">The Product Stock page, and repairing stock that drifted.</p>
+      </a>
+      <a href="./reference.html" class="card no-link" style="display: grid; grid-template-rows: subgrid; grid-row: span 2;">
+        <h3 class="tc-primary mt0">Reference</h3>
+        <p class="tc-muted">The API, the hooks it listens to, and how to run the tests.</p>
+      </a>
+    </div>
+
+    <h2 id="install" class="mt">Install</h2>
+    <pre><code class="language-bash">npm install kempo-products-inventory</code></pre>
+    <p>Then install it from <strong>Admin &gt; Extensions</strong>. Kempo refuses to enable it until <strong>kempo-products</strong> and <strong>kempo-inventory</strong> are both enabled. There is nothing to configure and it adds no permissions: to link materials you need <code>products:update</code> and <code>kempo-inventory:items:read</code>.</p>
+
+    <h2 id="quick-start" class="mt">Quick start</h2>
+    <h3>1. Have some materials</h3>
+    <p>In <strong>Inventory</strong>, add the items your products are made from, with their stock in whole units: grams and millilitres, not kilograms and litres.</p>
+    <h3 class="mt">2. Have a product</h3>
+    <p>In <strong>Products</strong>, add the product you sell, with its price and options.</p>
+    <h3 class="mt">3. Say what it is made from</h3>
+    <p>Open the product, find the <strong>Made from</strong> panel, add each material and how much one unit uses, and save. The product's stock is now worked out for you. See <a href="./made-from.html">Made from</a>.</p>
+    <h3 class="mt">4. Sell one</h3>
+    <p>When a purchase is recorded, the materials are taken out of inventory. Look at the item's history in the inventory admin to see the movement, with the order reference.</p>
+
+    <h2 id="how-it-fits" class="mt">How it fits together</h2>
+    <p>It reaches the other extensions only through their SDKs, and adds its interface through fragments those extensions provide.</p>
+    <div class="table-wrapper mb">
+      <table>
+        <thead><tr><th>Extension</th><th>What this uses from it</th></tr></thead>
+        <tbody>
+          <tr><td>kempo-products</td><td>The purchase events, <code>setStock</code>, <code>setManagedBy</code> and <code>setChoiceAvailability</code>, and the panel fragment on a product's form</td></tr>
+          <tr><td>kempo-inventory</td><td>The stock event, the <code>adjustStockMany</code> call that takes several materials atomically, and the panel fragment on an item's page</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>The three pieces of interface it adds are the <strong>Made from</strong> panel on a product's form, <strong>Make product from this item</strong> on an inventory item's page, and a <strong>Product Stock</strong> page. See the <a href="./reference.html#listens">reference</a> for every event it listens to.</p>
+  </content>
+</page>

@@ -8,7 +8,9 @@
   "type": "module",
   "scripts": {
     "test": "node --test --test-concurrency=1",
-    "link:local": "npm install ../kempo ../kempo-server ../kempo-ui ../kempo-products ../kempo-inventory --no-save --no-legacy-peer-deps --force"
+    "link:local": "npm install ../kempo ../kempo-server ../kempo-ui ../kempo-products ../kempo-inventory --no-save --no-legacy-peer-deps --force",
+    "docs:build": "node scripts/build-docs.js",
+    "docs:dev": "npx kempo-server --root docs --port 4051"
   },
   "exports": {
     "./install": "./install.js",
@@ -26,7 +28,8 @@
   },
   "devDependencies": {
     "drizzle-kit": "^0.31.10",
-    "postgres": "^3.4.9"
+    "postgres": "^3.4.9",
+    "highlight.js": "^11.11.1"
   },
   "dependencies": {
     "drizzle-orm": "^0.45.2"

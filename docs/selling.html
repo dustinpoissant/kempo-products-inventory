@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Selling - Kempo Products Inventory</title>
+  <meta name="description" content="Connects kempo-products to kempo-inventory: selling a product uses up the materials it is made from, and stock follows what is on the shelf." />
+  <link rel="icon" type="image/svg+xml" href="./media/icon.svg" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/kempo-css@2/dist/kempo.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/kempo-css@2/dist/kempo-hljs.min.css" />
+  <script>
+    window.kempo = {
+      pathToStylesheet: 'https://cdn.jsdelivr.net/npm/kempo-css@2/dist/kempo.min.css',
+      pathsToIcons: ['https://cdn.jsdelivr.net/npm/kempo-ui@0.5/icons']
+    };
+  </script>
+  <style>
+    [id] { scroll-margin-top: 5rem; }
+  </style>
+  
+
+</head>
+<body>
+  
+  <k-nav fixed class="bg-primary">
+    <button id="toggleNavSideMenu" class="link" aria-label="Menu">
+      <k-icon name="menu"></k-icon>
+    </button>
+    <a href="./" class="d-if ph" style="align-items: center">
+      <img src="./media/icon-white.svg" alt="" class="pr" width="28" height="28" />
+      Kempo Products Inventory
+    </a>
+    <a href="./made-from.html" class="m-d-n">Made from</a>
+    <a href="./selling.html" class="m-d-n">Selling</a>
+    <a href="./reference.html" class="m-d-n">Reference</a>
+    <div class="flex"></div>
+    <a href="https://www.npmjs.com/package/kempo-products-inventory" target="_blank" aria-label="npm"><k-icon name="npm"></k-icon></a>
+    <a href="https://github.com/dustinpoissant/kempo-products-inventory" target="_blank" aria-label="GitHub"><k-icon name="github-mark"></k-icon></a>
+    <k-theme-switcher
+      class="mr"
+      style="
+        --padding: 0.5rem;
+        --c_active: var(--tc_on_primary);
+        --tc_active: var(--c_primary);
+        --c_inactive__hover: rgba(255, 255, 255, 0.1);
+      "
+    ></k-theme-switcher>
+  </k-nav>
+  <k-nav-spacer></k-nav-spacer>
+  <k-aside id="navSideMenu" main="overlay" state="offscreen">
+    <menu>
+      <div class="ta-center bb mb r0">
+        <h1 class="tc-primary">Kempo Products Inventory</h1>
+      </div>
+      <h5><a href="./">Overview</a></h5>
+      <div class="ml mb -mt">
+        <a href="./#what-it-does" class="d-b">What it does</a>
+        <a href="./#install" class="d-b">Install</a>
+        <a href="./#quick-start" class="d-b">Quick start</a>
+        <a href="./#how-it-fits" class="d-b">How it fits together</a>
+      </div>
+      <h5><a href="./made-from.html">Made from</a></h5>
+      <div class="ml mb -mt">
+        <a href="./made-from.html#panel" class="d-b">The Made from panel</a>
+        <a href="./made-from.html#choices" class="d-b">Only with one choice</a>
+        <a href="./made-from.html#units" class="d-b">Units</a>
+        <a href="./made-from.html#from-item" class="d-b">Make product from an item</a>
+        <a href="./made-from.html#stock-managed" class="d-b">Stock is managed for you</a>
+      </div>
+      <h5><a href="./selling.html">Selling</a></h5>
+      <div class="ml mb -mt">
+        <a href="./selling.html#selling" class="d-b">Selling takes the materials</a>
+        <a href="./selling.html#stock-follows" class="d-b">Stock follows the materials</a>
+        <a href="./selling.html#shared" class="d-b">Shared materials</a>
+        <a href="./selling.html#restocking" class="d-b">Restocking</a>
+        <a href="./selling.html#reversing" class="d-b">Reversing a purchase</a>
+      </div>
+      <h5><a href="./problems.html">When something is wrong</a></h5>
+      <div class="ml mb -mt">
+        <a href="./problems.html#when" class="d-b">When it happens</a>
+        <a href="./problems.html#page" class="d-b">The Product Stock page</a>
+        <a href="./problems.html#deletes" class="d-b">Deleting an item</a>
+        <a href="./problems.html#repair" class="d-b">Repairing</a>
+      </div>
+      <h5><a href="./reference.html">Reference</a></h5>
+      <div class="ml mb -mt">
+        <a href="./reference.html#api" class="d-b">HTTP API</a>
+        <a href="./reference.html#listens" class="d-b">What it listens to</a>
+        <a href="./reference.html#uses" class="d-b">What it uses</a>
+        <a href="./reference.html#tables" class="d-b">Tables</a>
+        <a href="./reference.html#development" class="d-b">Development</a>
+      </div>
+      <hr />
+      <a href="https://www.npmjs.com/package/kempo-products-inventory" target="_blank"><k-icon name="npm"></k-icon> View on npm</a><br />
+      <a href="https://github.com/dustinpoissant/kempo-products-inventory" target="_blank"><k-icon name="github-mark"></k-icon> View on GitHub</a>
+    </menu>
+  </k-aside>
+  <script type="module">
+    document.getElementById('toggleNavSideMenu').addEventListener('click', async () => {
+      await window.customElements.whenDefined('k-aside');
+      document.getElementById('navSideMenu').toggle();
+    });
+    document.addEventListener('click', event => {
+      const link = event.target.closest('a[href^="#"]');
+      if(!link) return;
+      event.preventDefault();
+      const id = link.getAttribute('href').slice(1);
+      const target = document.getElementById(id);
+      if(!target) return;
+      target.scrollIntoView({ behavior: 'smooth' });
+      history.replaceState(null, '', `${location.pathname}${location.search}#${id}`);
+      document.getElementById('navSideMenu')?.hide?.();
+    });
+  </script>
+
+  <main>
+    <h1>Selling</h1>
+    
+    <h2 id="selling">Selling takes the materials</h2>
+    <p>When a purchase is recorded in kempo-products, this extension takes every material the product uses out of inventory in <strong>one atomic call</strong>. Either all of them are taken or none are, so a sale never takes the resin and then finds the paint short.</p>
+    <ul>
+      <li>The amount is the per-unit amount times the quantity bought, for the materials that match the choices bought.</li>
+      <li>Every inventory movement carries the order reference, written into its note, so you can find what an order took.</li>
+      <li>kempo-products records a purchase once per reference, so recording the same one again does not take anything twice.</li>
+    </ul>
+
+    <h2 id="stock-follows" class="mt">Stock follows the materials</h2>
+    <p>A linked product's stock is <strong>how many can be made from what is on hand</strong>: for each material, the quantity in inventory divided by the amount per unit, rounded down, and the smallest of those numbers wins. The scarcest material limits the product.</p>
+    <div class="mb">
+      <img src="./media/admin-product-stock.png" alt="The Product Stock admin page: a table of products with the inventory items they are made from, how many can be made, and what limits them." class="full b r" />
+      <small class="d-b tc-muted">The Product Stock page lists every linked product and what limits it.</small>
+    </div>
+    <p>Choices are worked out the same way: a colour is <strong>marked sold out</strong> when there is not enough of the materials it needs for one more.</p>
+
+    <h2 id="shared" class="mt">Products that share materials</h2>
+    <p>Two products can use the same material, and both stay correct. With 300 g of PLA and two products that each need 200 g, each shows 1 in stock. Sell one and 100 g is left, so <strong>both</strong> go out of stock, because neither can be made any more.</p>
+
+    <h2 id="restocking" class="mt">Restocking</h2>
+    <p>Receiving resin in the inventory, or correcting a count, recalculates every product made from that item straight away. A product that was out of stock comes back, with no action in the products admin.</p>
+
+    <h2 id="reversing" class="mt">Reversing a purchase</h2>
+    <p>When a purchase is reversed (a refund or a cancelled order), exactly what it took is put back. The extension remembers the amounts it took for each purchase, so the reversal is correct <strong>even if the links were edited since</strong>. Reversing twice puts back once.</p>
+  
+    <hr />
+    <p class="tc-muted small">kempo-products-inventory is open source under the MIT license. <a href="https://github.com/dustinpoissant/kempo-products-inventory" target="_blank">View it on GitHub</a>, or <a href="https://github.com/dustinpoissant/kempo-products-inventory/issues" target="_blank">report a problem</a>.</p>
+  </main>
+  <script type="module" src="https://cdn.jsdelivr.net/npm/kempo-ui@0.5/dist/components/Nav.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/npm/kempo-ui@0.5/dist/components/NavSpacer.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/npm/kempo-ui@0.5/dist/components/Aside.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/npm/kempo-ui@0.5/dist/components/Icon.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/npm/kempo-ui@0.5/dist/components/ThemeSwitcher.js"></script>
+  
+</body>
+</html>

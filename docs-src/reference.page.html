@@ -1,0 +1,70 @@
+<page pageName="Reference" title="Reference - Kempo Products Inventory">
+  <content>
+    <h2 id="api">HTTP API</h2>
+    <p>JSON routes under <code>/products-inventory/api/</code>. They need the products and inventory permissions named on the <a href="./#install">install</a> section.</p>
+    <div class="table-wrapper mb">
+      <table>
+        <thead><tr><th>Route</th><th>Purpose</th></tr></thead>
+        <tbody>
+          <tr><td><code>GET links</code></td><td>Everything linked (<code>?productId=</code> or <code>?inventoryItemId=</code> narrows it), with names and stock</td></tr>
+          <tr><td><code>PUT links</code></td><td>Replace what a product is made from: <code>{ productId, links: [{ inventoryItemId, quantity, optionKey?, choiceKey? }] }</code></td></tr>
+          <tr><td><code>POST recalculate</code></td><td>Recalculate every linked product</td></tr>
+          <tr><td><code>GET problems</code>, <code>DELETE problems/&lt;id&gt;</code></td><td>What needs attention, and dismissing it</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <pre><code class="language-js">await fetch('/products-inventory/api/links', {
+  method: 'PUT',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    productId: 12,
+    links: [
+      { inventoryItemId: 3, quantity: 175 },
+      { inventoryItemId: 7, quantity: 20, optionKey: 'color', choiceKey: 'red' },
+    ],
+  }),
+});</code></pre>
+
+    <h2 id="listens" class="mt">What it listens to</h2>
+    <div class="table-wrapper mb">
+      <table>
+        <thead><tr><th>Event</th><th>And</th></tr></thead>
+        <tbody>
+          <tr><td><code>kempo-products:purchase:recorded</code></td><td>takes the materials out of inventory in one atomic call</td></tr>
+          <tr><td><code>kempo-products:purchase:reversed</code></td><td>puts back what that purchase took</td></tr>
+          <tr><td><code>kempo-inventory:stock:adjusted</code></td><td>recalculates every product made from that item</td></tr>
+          <tr><td><code>kempo-products:product:deleted</code></td><td>forgets what the product was made from</td></tr>
+          <tr><td><code>kempo-inventory:item:before_delete</code></td><td>refuses while products are made from the item</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 id="uses" class="mt">What it uses</h2>
+    <ul>
+      <li>From kempo-products: <code>setStock</code>, <code>setManagedBy</code> and <code>setChoiceAvailability</code>.</li>
+      <li>From kempo-inventory: <code>adjustStockMany</code>.</li>
+      <li>Fragments: the <strong>Made from</strong> panel on a product's form, the <strong>Make product from this item</strong> panel on an item's page (<code>inventory-item-actions</code>), and the admin pages.</li>
+    </ul>
+
+    <h2 id="tables" class="mt">Tables</h2>
+    <div class="table-wrapper mb">
+      <table>
+        <thead><tr><th>Table</th><th>Holds</th></tr></thead>
+        <tbody>
+          <tr><td>link</td><td>A product, an inventory item, the amount per unit, and optionally the option and choice it applies to</td></tr>
+          <tr><td>deduction</td><td>What each purchase took, by reference, so a reversal puts back exactly that</td></tr>
+          <tr><td>problem</td><td>Purchases whose materials could not be taken, until dismissed</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Uninstalling drops these tables. The products and inventory items themselves are not touched.</p>
+
+    <h2 id="development" class="mt">Development</h2>
+    <pre><code class="language-bash">npm run link:local          # symlinks the sibling kempo checkouts
+docker compose up -d        # a throwaway Postgres on port 5444
+DATABASE_URL=postgresql://kempo:kempo@localhost:5444/kempo_products_inventory_test npx drizzle-kit push --force
+DATABASE_URL=postgresql://kempo:kempo@localhost:5444/kempo_products_inventory_test npm test</code></pre>
+    <p>The database tests run the whole chain with the real hooks registered: a purchase in kempo-products takes materials out of kempo-inventory, and products made from them follow. They skip themselves when no database is reachable and refuse to run unless its name ends in <code>_test</code>. <strong>A green run with SKIPPED did not test the database.</strong></p>
+    <p>The documentation is written in <code>docs-src/</code> and built into <code>docs/</code> for GitHub Pages. Edit <code>docs-src/</code>, then run <code>npm run docs:build</code>. <code>npm run docs:dev</code> serves it on port 4051.</p>
+  </content>
+</page>
