@@ -6,7 +6,7 @@ All notable changes to `kempo-products-inventory` are documented in this file.
 
 First release.
 
-- A **documentation site** (`docs-src/` built into `docs/` for GitHub Pages) with screenshots of the admin, and tests that keep it honest.
+- A **documentation site** (`docs-src/` built into `docs/` for GitHub Pages) with screenshots of the admin.
 
 Connects kempo-products to kempo-inventory.
 
