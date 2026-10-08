@@ -1,0 +1,5 @@
+{
+  "docs": "https://github.com/dustinpoissant/kempo-products-inventory#readme",
+  "git": "https://github.com/dustinpoissant/kempo-products-inventory",
+  "dependencies": ["kempo-products", "kempo-inventory"]
+}

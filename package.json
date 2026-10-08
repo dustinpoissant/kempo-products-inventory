@@ -1,0 +1,31 @@
+{
+  "name": "kempo-products-inventory",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Connects kempo-products to kempo-inventory: selling a product uses up the raw materials it is made from",
+  "license": "MIT",
+  "author": "Dustin Poissant",
+  "type": "module",
+  "scripts": {
+    "test": "kempo-test -l minimal",
+    "link:local": "npm install ../kempo ../kempo-server ../kempo-ui ../kempo-products ../kempo-inventory --no-save --no-legacy-peer-deps --force"
+  },
+  "exports": {
+    "./install": "./install.js",
+    "./update": "./update.js",
+    "./uninstall": "./uninstall.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dustinpoissant/kempo-products-inventory.git"
+  },
+  "peerDependencies": {
+    "kempo": ">=4.3.0",
+    "kempo-inventory": ">=0.2.1",
+    "kempo-products": ">=0.1.0",
+    "kempo-ui": ">=0.5.0"
+  },
+  "devDependencies": {
+    "kempo-testing-framework": "^1.4.11"
+  }
+}
