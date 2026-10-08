@@ -7,7 +7,7 @@
   "author": "Dustin Poissant",
   "type": "module",
   "scripts": {
-    "test": "node --test",
+    "test": "node --test --test-concurrency=1",
     "link:local": "npm install ../kempo ../kempo-server ../kempo-ui ../kempo-products ../kempo-inventory --no-save --no-legacy-peer-deps --force"
   },
   "exports": {
