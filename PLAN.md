@@ -1,6 +1,6 @@
 # kempo-products-inventory: plan
 
-Status: **design, nothing built.** Decisions are marked **Agreed**, **Proposed** or **Unverified**, as in the kempo-products plan. Read `../kempo-products/PLAN.md` first; this connector depends on the interface it defines (sections 7 and 8).
+Status: **built and tested** (see section 7). This file began as the design and has been brought in line with what was built; where they differed, the built behaviour is described. Decisions are marked **Agreed** or **Proposed**, as in the kempo-products plan. Read `../kempo-products/PLAN.md` first; this connector depends on the interface it defines (sections 7 and 8).
 
 ## 1. Purpose
 
@@ -58,7 +58,7 @@ The base extensions' own stock checks stop most oversells, but counts can drift 
 - **On the inventory item page:** a **Make product from this item** button, which opens the products create form prefilled from the item (name, SKU, stock), with one link of quantity 1. If a product already uses the item, a link to it and the list of products that use it. **Agreed** as the flow for pre-made items. Needs a named location on the inventory item page.
 - **A settings page or action** to recalculate all products, and to show unresolved problems.
 
-**Unverified:** how the prefill travels to the products create form (a query parameter such as `?fromInventoryItem=` read by the panel), and that a named location inside a product or item page can be pushed into by another extension.
+**Verified:** the prefill travels as `?name=` and `?fromInventoryItem=` on the products create form, which the panel reads. A page cannot define a `<location>`, so both panels are *fragments* (`products-admin-product-panels` and `inventory-item-actions`) that the other extensions' pages include and this extension supplies from its own `admin/` directory.
 
 ## 6. What the other extensions must provide
 
@@ -67,24 +67,35 @@ kempo-products (in its plan): `purchase:recorded`, `purchase:reversed`, `setStoc
 kempo-inventory (to build, as small generic primitives, not product features):
 
 1. **`adjustStockMany`**: apply several stock changes in one transaction, all or nothing, with a shared reference. Today `adjustStock` runs one transaction per item, so a recipe can't be deducted atomically.
-2. **A named `<location>` on the item page** for extension actions. Today `admin/edit/index.page.html` has none.
+2. **An extension fragment on the item page** (`inventory-item-actions`), for extension actions. Both are built, in the kempo-inventory repo, and kempo-products gained the matching `panels` slot and `product-saved`/`draft-change` events.
 
 Reservations (holding stock between order and build) are deliberately not needed.
 
 ## 7. Build phases
 
 0. **Scaffold.** Done.
-1. Inventory primitives (in the kempo-inventory repo).
-2. Link table, admin panel, recalculation.
-3. Purchase and reversal handlers; inventory-adjusted handler.
-4. "Make product from this item"; recalculate-all and problem list.
+1. **Inventory primitives** (in the kempo-inventory repo). Built.
+2. **Link table, admin panel, recalculation.** Built.
+3. **Purchase and reversal handlers; inventory-adjusted handler.** Built.
+4. **"Make product from this item"; recalculate-all and problem list.** Built.
 
 ## 8. Tests
 
 Recalculation and the material-collecting logic are pure functions of links, quantities and stock, tested without a server. The worked example in section 1 is a test case. A DB suite exercises the handlers against a real Postgres, and the repo needs real kempo-products and kempo-inventory installed to run, so CI follows the sibling extensions' "published" and "siblings" jobs.
 
-## 9. Open questions
+## 9. Decisions made while building, and what is left
 
-1. How are unresolved problems recorded and shown: a small table with an admin list, or only a log line and the recalculated stock? Recommendation: a table, since silent drift in stock is the failure mode this extension exists to prevent.
-2. Should a person be able to override a managed product's stock in the products admin? Recommendation: no; to change it, unlink the product or adjust the inventory.
-3. Choice availability uses "its own links and the fixed links can supply one unit". Two choices sharing one scarce item (two reds from one tin) are each shown available, though only one more could be sold. Acceptable, since recalculation after the purchase corrects it?
+Resolved (built that way; awaiting your review):
+
+1. **Problems are recorded in a table** (`kempoProductInventoryProblem`) and listed on the Product Stock page until dismissed, because silent drift in stock is the failure this extension exists to prevent.
+2. **A person cannot override a managed product's stock** in the products admin; the server refuses it. To change it, change the inventory or remove the links.
+3. **Two choices sharing one scarce item** (two reds from one tin) are each shown in stock although only one more could be sold; the recalculation after the sale corrects it.
+
+Also decided: what a purchase actually took is stored per purchase (`kempoProductInventoryDeduction`), so a reversal puts back exactly that even if the links were edited since.
+
+Not built, and worth deciding next:
+
+- **Deducting at build time instead of at sale**, for a shop that wants materials held until a build starts. Reservations in inventory would be the primitive; they were deliberately left out.
+- **Units.** Inventory counts whole numbers with no unit, so recipes are in grams and millilitres. A display unit on items would let 175 g show as 0.175 kg.
+- **A preview in the "Made from" panel** of how many can be made from the materials, before saving.
+- **Per-line problem detail**, for example which material was short, as structured data and not only in the message.
