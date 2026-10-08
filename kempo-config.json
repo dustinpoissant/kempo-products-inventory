@@ -1,5 +1,14 @@
 {
   "docs": "https://github.com/dustinpoissant/kempo-products-inventory#readme",
   "git": "https://github.com/dustinpoissant/kempo-products-inventory",
-  "dependencies": ["kempo-products", "kempo-inventory"]
+  "public-scope": "products-inventory",
+  "schema": "./server/db/schema.js",
+  "dependencies": ["kempo-products", "kempo-inventory"],
+  "hooks": {
+    "kempo-products:purchase:recorded": "./hooks/purchase-recorded.js",
+    "kempo-products:purchase:reversed": "./hooks/purchase-reversed.js",
+    "kempo-products:product:deleted": "./hooks/product-deleted.js",
+    "kempo-inventory:stock:adjusted": "./hooks/stock-adjusted.js",
+    "kempo-inventory:item:before_delete": "./hooks/item-before-delete.js"
+  }
 }

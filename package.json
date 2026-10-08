@@ -7,13 +7,12 @@
   "author": "Dustin Poissant",
   "type": "module",
   "scripts": {
-    "test": "kempo-test -l minimal",
+    "test": "node --test",
     "link:local": "npm install ../kempo ../kempo-server ../kempo-ui ../kempo-products ../kempo-inventory --no-save --no-legacy-peer-deps --force"
   },
   "exports": {
     "./install": "./install.js",
-    "./update": "./update.js",
-    "./uninstall": "./uninstall.js"
+    "./update": "./update.js"
   },
   "repository": {
     "type": "git",
@@ -26,6 +25,26 @@
     "kempo-ui": ">=0.5.0"
   },
   "devDependencies": {
-    "kempo-testing-framework": "^1.4.11"
-  }
+    "drizzle-kit": "^0.31.10",
+    "postgres": "^3.4.9"
+  },
+  "dependencies": {
+    "drizzle-orm": "^0.45.2"
+  },
+  "kempo": {
+    "public-scope": "products-inventory"
+  },
+  "files": [
+    "admin",
+    "public",
+    "server",
+    "hooks",
+    "install.js",
+    "update.js",
+    "kempo-config.json"
+  ],
+  "bugs": {
+    "url": "https://github.com/dustinpoissant/kempo-products-inventory/issues"
+  },
+  "homepage": "https://github.com/dustinpoissant/kempo-products-inventory#readme"
 }
