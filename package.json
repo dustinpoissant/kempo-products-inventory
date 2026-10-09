@@ -1,6 +1,6 @@
 {
   "name": "kempo-products-inventory",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Connects kempo-products to kempo-inventory: selling a product uses up the raw materials it is made from",
   "license": "MIT",
   "author": "Dustin Poissant",
