@@ -17,6 +17,13 @@
   </script>
   <style>
     [id] { scroll-margin-top: 5rem; }
+    .img-dark { display: none; }
+    [theme="dark"] .img-dark { display: block; }
+    [theme="dark"] .img-light { display: none; }
+    @media (prefers-color-scheme: dark) {
+      :root:not([theme="light"]) .img-dark { display: block; }
+      :root:not([theme="light"]) .img-light { display: none; }
+    }
   </style>
   
 
@@ -128,7 +135,8 @@
     <p>This connects <a href="https://dustinpoissant.github.io/kempo-products/" target="_blank">kempo-products</a> to <a href="https://dustinpoissant.github.io/kempo-inventory/" target="_blank">kempo-inventory</a>. Neither of those needs the other: a catalog can exist with no inventory, and an inventory with no products. Install this one when you use both.</p>
 
     <div class="mb">
-      <img src="./media/admin-made-from.png" alt="A product's Made from tab in the products admin, listing the inventory items the product is made from with an amount of each per unit, and the choice each applies to." class="full b r" />
+      <img src="./media/admin-made-from-light.png" alt="A product's Made from tab in the products admin, listing the inventory items the product is made from with an amount of each per unit, and the choice each applies to." class="img-light full b r" />
+      <img src="./media/admin-made-from-dark.png" alt="A product's Made from tab in the products admin, listing the inventory items the product is made from with an amount of each per unit, and the choice each applies to." class="img-dark full b r" />
       <small class="d-b tc-muted">The Made from tab on a product's form.</small>
     </div>
 

@@ -17,6 +17,13 @@
   </script>
   <style>
     [id] { scroll-margin-top: 5rem; }
+    .img-dark { display: none; }
+    [theme="dark"] .img-dark { display: block; }
+    [theme="dark"] .img-light { display: none; }
+    @media (prefers-color-scheme: dark) {
+      :root:not([theme="light"]) .img-dark { display: block; }
+      :root:not([theme="light"]) .img-light { display: none; }
+    }
   </style>
   
 
@@ -128,7 +135,8 @@
     <h2 id="stock-follows" class="mt">Stock follows the materials</h2>
     <p>A linked product's stock is <strong>how many can be made from what is on hand</strong>: for each material, the quantity in inventory divided by the amount per unit, rounded down, and the smallest of those numbers wins. The scarcest material limits the product.</p>
     <div class="mb">
-      <img src="./media/admin-product-stock.png" alt="The Product Stock admin page: a table of products with the inventory items they are made from, how many can be made, and what limits them." class="full b r" />
+      <img src="./media/admin-product-stock-light.png" alt="The Product Stock admin page: a table of products with the inventory items they are made from, how many can be made, and what limits them." class="img-light full b r" />
+      <img src="./media/admin-product-stock-dark.png" alt="The Product Stock admin page: a table of products with the inventory items they are made from, how many can be made, and what limits them." class="img-dark full b r" />
       <small class="d-b tc-muted">The Product Stock page lists every linked product and what limits it.</small>
     </div>
     <p>Choices are worked out the same way: a colour is <strong>marked sold out</strong> when there is not enough of the materials it needs for one more.</p>

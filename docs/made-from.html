@@ -17,6 +17,13 @@
   </script>
   <style>
     [id] { scroll-margin-top: 5rem; }
+    .img-dark { display: none; }
+    [theme="dark"] .img-dark { display: block; }
+    [theme="dark"] .img-light { display: none; }
+    @media (prefers-color-scheme: dark) {
+      :root:not([theme="light"]) .img-dark { display: block; }
+      :root:not([theme="light"]) .img-light { display: none; }
+    }
   </style>
   
 
@@ -120,7 +127,8 @@
     <h2 id="panel">The Made from tab</h2>
     <p>Open a product in <strong>Products</strong>. The <strong>Made from</strong> tab, next to Details, Description, Media and Options, lists the inventory items one unit of the product uses up. Add a row for each material, pick the inventory item, and enter how much one unit uses. Saving the product saves the links.</p>
     <div class="mb">
-      <img src="./media/admin-made-from.png" alt="A product's Made from tab with rows for each material: the inventory item, the amount per unit, and when it applies." class="full b r" />
+      <img src="./media/admin-made-from-light.png" alt="A product's Made from tab with rows for each material: the inventory item, the amount per unit, and when it applies." class="img-light full b r" />
+      <img src="./media/admin-made-from-dark.png" alt="A product's Made from tab with rows for each material: the inventory item, the amount per unit, and when it applies." class="img-dark full b r" />
       <small class="d-b tc-muted">A product with four materials. Black resin and TPU are always used; the paint depends on the colour chosen.</small>
     </div>
     <p>Only people with <code>products:update</code> and <code>kempo-inventory:items:read</code> can link materials. A product with no materials is untouched: its stock stays whatever you set, and selling it takes nothing from inventory.</p>
@@ -128,7 +136,8 @@
     <h2 id="choices" class="mt">Only with one choice</h2>
     <p>A material can apply <strong>always</strong>, or <strong>only when one choice of an option is selected</strong>. A model car with a Color option can use red paint for Red and blue paint for Blue, and the resin for every colour.</p>
     <div class="mb">
-      <img src="./media/admin-options.png" alt="The Options section of a product in the products admin: a Color option with Red and Blue choices, each with its own price adjustment." class="full b r" />
+      <img src="./media/admin-options-light.png" alt="The Options section of a product in the products admin: a Color option with Red and Blue choices, each with its own price adjustment." class="img-light full b r" />
+      <img src="./media/admin-options-dark.png" alt="The Options section of a product in the products admin: a Color option with Red and Blue choices, each with its own price adjustment." class="img-dark full b r" />
       <small class="d-b tc-muted">The Color option the paint rows above refer to. Options are set up in kempo-products.</small>
     </div>
     <ul>
@@ -143,7 +152,8 @@
     <h2 id="from-item" class="mt">Make a product from an item</h2>
     <p>For a piece you already made, open the item in the inventory admin and choose <strong>Make product from this item</strong>.</p>
     <div class="mb">
-      <img src="./media/admin-inventory-item.png" alt="An inventory item's page with the Make product from this item panel under the item form." class="full b r" />
+      <img src="./media/admin-inventory-item-light.png" alt="An inventory item's page with the Make product from this item panel under the item form." class="img-light full b r" />
+      <img src="./media/admin-inventory-item-dark.png" alt="An inventory item's page with the Make product from this item panel under the item form." class="img-dark full b r" />
       <small class="d-b tc-muted">The panel under an inventory item's form.</small>
     </div>
     <p>The new product form opens with the name filled in and the item already listed as its material, <strong>one for one</strong>, so the product's stock is the item's quantity. Fill in the price and the rest, and save. This panel exists because kempo-inventory lets another extension add to its item page; see <a href="https://dustinpoissant.github.io/kempo-inventory/extending.html#item-actions" target="_blank">Adding to the item page</a>.</p>

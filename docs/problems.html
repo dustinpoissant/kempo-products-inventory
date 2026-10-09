@@ -17,6 +17,13 @@
   </script>
   <style>
     [id] { scroll-margin-top: 5rem; }
+    .img-dark { display: none; }
+    [theme="dark"] .img-dark { display: block; }
+    [theme="dark"] .img-light { display: none; }
+    @media (prefers-color-scheme: dark) {
+      :root:not([theme="light"]) .img-dark { display: block; }
+      :root:not([theme="light"]) .img-light { display: none; }
+    }
   </style>
   
 
@@ -124,7 +131,8 @@
     <h2 id="page" class="mt">The Product Stock page</h2>
     <p>Open <strong>Product Stock</strong> in the admin menu to see what is linked and what needs attention.</p>
     <div class="mb">
-      <img src="./media/admin-product-stock.png" alt="The Product Stock page, listing linked products and the materials limiting each." class="full b r" />
+      <img src="./media/admin-product-stock-light.png" alt="The Product Stock page, listing linked products and the materials limiting each." class="img-light full b r" />
+      <img src="./media/admin-product-stock-dark.png" alt="The Product Stock page, listing linked products and the materials limiting each." class="img-dark full b r" />
       <small class="d-b tc-muted">The Product Stock page.</small>
     </div>
     <p>Each problem can be dismissed once you have dealt with it.</p>

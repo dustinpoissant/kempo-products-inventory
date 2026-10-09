@@ -86,4 +86,4 @@ DATABASE_URL=postgresql://kempo:kempo@localhost:5444/kempo_products_inventory_te
 
 The database tests run the whole chain with the real hooks registered: a purchase in kempo-products takes materials out of kempo-inventory, and products made from them follow. They skip themselves when no database is reachable and refuse to run unless its name ends in `_test`. **A green run with `SKIPPED` did not test the database.**
 
-The documentation site is written in `docs-src/` and built into `docs/` for GitHub Pages. Edit `docs-src/`, never `docs/`, then run `npm run docs:build` (`npm run docs:dev` serves it on port 4051).
+The documentation site is written in `docs-src/` and built into `docs/` for GitHub Pages. Edit `docs-src/`, never `docs/`, then run `npm run docs:build` (`npm run docs:dev` serves it on port 4051). Screenshots come in pairs: write `<img src="./media/name.png" ...>` in a page, and put `name-light.png` and `name-dark.png` in `docs-src/media`. The build turns the tag into both images and the site shows the one matching the visitor's theme.
