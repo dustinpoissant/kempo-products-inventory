@@ -31,8 +31,8 @@ test('the files the package ships exist', () => {
   for(const file of pkg.files) assert.ok(existsSync(new URL(`../${file}`, import.meta.url)), file);
 });
 
-test('the two panels it adds are fragments the other extensions look for', () => {
-  assert.ok(existsSync(new URL('../admin/products-admin-product-panels.fragment.html', import.meta.url)));
+test('the product tab is global content and the item panel a fragment the other extensions look for', () => {
+  assert.ok(existsSync(new URL('../admin/product-tab.global.html', import.meta.url)));
   assert.ok(existsSync(new URL('../admin/inventory-item-actions.fragment.html', import.meta.url)));
 });
 

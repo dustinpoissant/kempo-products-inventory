@@ -17,7 +17,7 @@ import { getLinksForProduct, saveLinks } from '/products-inventory/sdk.js';
   the colour that was bought. Amounts are whole numbers in the item's own unit, so keep stock in
   grams or millilitres.
 
-  It sits in the product form's `panels` slot (see the kempo-products form) and saves with it: when
+  It is the "Made from" tab of the product form (a <k-prod-tab>, see the kempo-products form) and saves with it: when
   the form fires `product-saved` this saves the materials too. From the address it reads ?id= (the
   product being edited) and ?fromInventoryItem= (an item to start with, from "Make product from this
   item").

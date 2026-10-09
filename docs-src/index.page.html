@@ -11,12 +11,12 @@
     <p>This connects <a href="https://dustinpoissant.github.io/kempo-products/" target="_blank">kempo-products</a> to <a href="https://dustinpoissant.github.io/kempo-inventory/" target="_blank">kempo-inventory</a>. Neither of those needs the other: a catalog can exist with no inventory, and an inventory with no products. Install this one when you use both.</p>
 
     <div class="mb">
-      <img src="./media/admin-made-from.png" alt="A product's Made from panel in the products admin, listing the inventory items the product is made from with an amount of each per unit, and the choice each applies to." class="full b r" />
-      <small class="d-b tc-muted">The Made from panel on a product's form.</small>
+      <img src="./media/admin-made-from.png" alt="A product's Made from tab in the products admin, listing the inventory items the product is made from with an amount of each per unit, and the choice each applies to." class="full b r" />
+      <small class="d-b tc-muted">The Made from tab on a product's form.</small>
     </div>
 
     <h2 id="what-it-does" class="mt">What it does</h2>
-    <p>You tell it what a product is made from. Open a product and use the <strong>Made from</strong> panel:</p>
+    <p>You tell it what a product is made from. Open a product and use its <strong>Made from</strong> tab:</p>
     <div class="table-wrapper mb">
       <table>
         <thead><tr><th>Product</th><th>Material</th><th>Per unit</th><th>Used</th></tr></thead>
@@ -68,7 +68,7 @@
     <h3 class="mt">2. Have a product</h3>
     <p>In <strong>Products</strong>, add the product you sell, with its price and options.</p>
     <h3 class="mt">3. Say what it is made from</h3>
-    <p>Open the product, find the <strong>Made from</strong> panel, add each material and how much one unit uses, and save. The product's stock is now worked out for you. See <a href="./made-from.html">Made from</a>.</p>
+    <p>Open the product, find the <strong>Made from</strong> tab, add each material and how much one unit uses, and save. The product's stock is now worked out for you. See <a href="./made-from.html">Made from</a>.</p>
     <h3 class="mt">4. Sell one</h3>
     <p>When a purchase is recorded, the materials are taken out of inventory. Look at the item's history in the inventory admin to see the movement, with the order reference.</p>
 
@@ -78,11 +78,11 @@
       <table>
         <thead><tr><th>Extension</th><th>What this uses from it</th></tr></thead>
         <tbody>
-          <tr><td>kempo-products</td><td>The purchase events, <code>setStock</code>, <code>setManagedBy</code> and <code>setChoiceAvailability</code>, and the panel fragment on a product's form</td></tr>
+          <tr><td>kempo-products</td><td>The purchase events, <code>setStock</code>, <code>setManagedBy</code> and <code>setChoiceAvailability</code>, and the <code>products-admin-product-tabs</code> location on a product's form</td></tr>
           <tr><td>kempo-inventory</td><td>The stock event, the <code>adjustStockMany</code> call that takes several materials atomically, and the panel fragment on an item's page</td></tr>
         </tbody>
       </table>
     </div>
-    <p>The three pieces of interface it adds are the <strong>Made from</strong> panel on a product's form, <strong>Make product from this item</strong> on an inventory item's page, and a <strong>Product Stock</strong> page. See the <a href="./reference.html#listens">reference</a> for every event it listens to.</p>
+    <p>The three pieces of interface it adds are the <strong>Made from</strong> tab on a product's form, <strong>Make product from this item</strong> on an inventory item's page, and a <strong>Product Stock</strong> page. See the <a href="./reference.html#listens">reference</a> for every event it listens to.</p>
   </content>
 </page>

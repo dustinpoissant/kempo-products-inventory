@@ -10,7 +10,7 @@ Neither of those extensions needs the other. Install this one when you use both.
 
 ## What it does
 
-You tell it what a product is made from. Open a product in **Products** and use the **Made from** panel:
+You tell it what a product is made from. Open a product in **Products** and use its **Made from** tab:
 
 | Product | Material | Per unit | Used |
 |---|---|---|---|
@@ -62,7 +62,7 @@ Install it from **Admin > Extensions** once kempo-products and kempo-inventory a
 | `kempo-products:product:deleted` | forgets what the product was made from |
 | `kempo-inventory:item:before_delete` | refuses while products are made from the item |
 
-It reaches the other extensions only through their SDKs (`setStock`, `setManagedBy` and `setChoiceAvailability` from kempo-products; `adjustStockMany` from kempo-inventory) and adds three pieces of interface through fragments those extensions provide: the **Made from** panel on a product's form, the **Make product from this item** panel on an inventory item's page, and a **Product Stock** page.
+It reaches the other extensions only through their SDKs (`setStock`, `setManagedBy` and `setChoiceAvailability` from kempo-products; `adjustStockMany` from kempo-inventory) and adds three pieces of interface through extension points those extensions provide: the **Made from** tab on a product's form (global content pushed into kempo-products' `products-admin-product-tabs` location), the **Make product from this item** panel on an inventory item's page, and a **Product Stock** page.
 
 ## API
 

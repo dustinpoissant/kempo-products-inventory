@@ -58,7 +58,7 @@ The base extensions' own stock checks stop most oversells, but counts can drift 
 - **On the inventory item page:** a **Make product from this item** button, which opens the products create form prefilled from the item (name, SKU, stock), with one link of quantity 1. If a product already uses the item, a link to it and the list of products that use it. **Agreed** as the flow for pre-made items. Needs a named location on the inventory item page.
 - **A settings page or action** to recalculate all products, and to show unresolved problems.
 
-**Verified:** the prefill travels as `?name=` and `?fromInventoryItem=` on the products create form, which the panel reads. A page cannot define a `<location>`, so both panels are *fragments* (`products-admin-product-panels` and `inventory-item-actions`) that the other extensions' pages include and this extension supplies from its own `admin/` directory.
+**Verified:** the prefill travels as `?name=` and `?fromInventoryItem=` on the products create form, which the panel reads. A page cannot define a `<location>`, the item panel is a *fragment* (`inventory-item-actions`) that inventory's page includes, and the product form's "Made from" tab is *global content* (`admin/product-tab.global.html`) pushed into the `products-admin-product-tabs` location the product form pages carry.
 
 ## 6. What the other extensions must provide
 
@@ -67,7 +67,7 @@ kempo-products (in its plan): `purchase:recorded`, `purchase:reversed`, `setStoc
 kempo-inventory (to build, as small generic primitives, not product features):
 
 1. **`adjustStockMany`**: apply several stock changes in one transaction, all or nothing, with a shared reference. Today `adjustStock` runs one transaction per item, so a recipe can't be deducted atomically.
-2. **An extension fragment on the item page** (`inventory-item-actions`), for extension actions. Both are built, in the kempo-inventory repo, and kempo-products gained the matching `panels` slot and `product-saved`/`draft-change` events.
+2. **An extension fragment on the item page** (`inventory-item-actions`), for extension actions. Both are built, in the kempo-inventory repo, and kempo-products gained tabs on its form, a `products-admin-product-tabs` location for extensions to push a <k-prod-tab> into, and the `product-saved`/`draft-change` events.
 
 Reservations (holding stock between order and build) are deliberately not needed.
 
