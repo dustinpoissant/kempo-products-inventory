@@ -99,5 +99,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # Disabled until the package is first published to npm and trusted publishing is configured for it.
-      # - run: npm publish --access public
+      # Published with npm Trusted Publishing (OIDC), so no token is needed.
+      - run: npm publish --access public
