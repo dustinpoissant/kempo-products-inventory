@@ -4,6 +4,10 @@ All notable changes to `kempo-products-inventory` are documented in this file.
 
 ## [Unreleased]
 
+### Added
+
+- **Dashboard widget.** A **Product stock sync** widget on the kempo admin dashboard showing whether product availability matches inventory, listing any problems, with a **Recalculate** button, declared in `widgets` in `kempo-config.json`. Needs a kempo with the dashboard; ignored on older versions.
+
 First release.
 
 - A **documentation site** (`docs-src/` built into `docs/` for GitHub Pages) with screenshots of the admin.

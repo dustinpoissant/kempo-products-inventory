@@ -1,4 +1,19 @@
 {
+  "widgets": [
+    {
+      "key": "sync",
+      "title": "Product stock sync",
+      "description": "Problems keeping product availability in step with inventory.",
+      "icon": "link",
+      "element": "k-pi-widget",
+      "module": "/products-inventory/components/LinksWidget.js",
+      "defaultWidth": 2,
+      "defaultHeight": 1,
+      "minWidth": 1,
+      "permission": "products:read",
+      "priority": 102
+    }
+  ],
   "docs": "https://github.com/dustinpoissant/kempo-products-inventory#readme",
   "git": "https://github.com/dustinpoissant/kempo-products-inventory",
   "public-scope": "products-inventory",
