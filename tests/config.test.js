@@ -24,7 +24,7 @@ test('every hook is documented in the README', () => {
 });
 
 test('the public scope matches between the config and the package', () => {
-  assert.equal(config['public-scope'], pkg.kempo['public-scope']);
+  assert.equal('kempo' in pkg, false, 'package.json has a kempo field; it lives in kempo-config.json only');
 });
 
 test('the files the package ships exist', () => {
