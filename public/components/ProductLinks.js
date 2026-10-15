@@ -187,10 +187,10 @@ export default class ProductLinks extends ShadowComponent {
     if(this.error) return html`<p class="tc-danger">${this.error}</p>`;
     return html`<section class="card mt" style="max-width: 48rem;">
       <h4>Made from</h4>
-      <p class="tc-muted">The inventory this product uses up, per unit sold. When it sells, these amounts come out of inventory, and products that share them go out of stock once there is not enough left. Use whole numbers in the item's unit (grams, millilitres).</p>
+      <p class="tc-muted mb">The inventory this product uses up, per unit sold. When it sells, these amounts come out of inventory, and products that share them go out of stock once there is not enough left. Use whole numbers in the item's unit (grams, millilitres).</p>
+      ${this.options.some(option => !option.key) ? html`<small class="d-b tc-muted mb">Save the product first to tie a material to a new option's choices.</small>` : ''}
       ${this.rows.map((row, index) => this.renderRow(row, index))}
-      <button type="button" class="btn mbh" id="addMaterial" @click=${this.add}><k-icon name="add"></k-icon> Add material</button>
-      ${this.options.some(option => !option.key) ? html`<small class="d-b tc-muted">Save the product first to tie a material to a new option's choices.</small>` : ''}
+      <button type="button" class="btn mb" id="addMaterial" @click=${this.add}><k-icon name="add"></k-icon> Add material</button>
     </section>`;
   }
 }
