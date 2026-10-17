@@ -21,10 +21,10 @@
     "url": "git+https://github.com/dustinpoissant/kempo-products-inventory.git"
   },
   "peerDependencies": {
-    "kempo": ">=4.5.8",
-    "kempo-inventory": ">=0.2.1",
-    "kempo-products": ">=0.1.0",
-    "kempo-ui": ">=0.5.0"
+    "kempo": ">=4.7.0",
+    "kempo-inventory": ">=0.4.0",
+    "kempo-products": ">=0.2.0",
+    "kempo-ui": ">=0.6.0"
   },
   "devDependencies": {
     "@electric-sql/pglite": "^0.5.9",

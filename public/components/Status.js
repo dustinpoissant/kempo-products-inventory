@@ -7,7 +7,7 @@ import { getLinksForProduct, recalculateAll, getProblems, dismissProblem } from 
 
 /*
   The connector's own page: everything that is linked, what needs a person's attention, and the
-  repair tool. Stock normally follows inventory by itself; "Recalculate everything" is for after
+  repair tool. Quantity normally follows inventory by itself; "Recalculate everything" is for after
   something changed behind the system's back (a count done by hand in the database).
 */
 export default class Status extends ShadowComponent {
@@ -104,7 +104,7 @@ export default class Status extends ShadowComponent {
           const mine = links.filter(link => link.productId === id);
           return html`<tr>
             <td>${product ? html`<a href=${`/admin/extension/kempo-products/edit?id=${encodeURIComponent(id)}`}>${product.name}</a>` : '(deleted product)'}</td>
-            <td>${product ? (product.stock === -1 ? 'Unlimited' : product.stock) : ''}</td>
+            <td>${product ? (product.quantity === -1 ? 'Unlimited' : product.quantity) : ''}</td>
             <td>${mine.map(link => `${link.quantity} × ${items[link.inventoryItemId]?.name ?? '(deleted item)'}${link.optionKey ? ` (${link.optionKey}: ${link.choiceKey})` : ''}`).join(', ')}</td>
           </tr>`;
         })}</tbody>
@@ -113,4 +113,4 @@ export default class Status extends ShadowComponent {
   }
 }
 
-customElements.define('k-pi-status', Status);
+customElements.define('k-products-inventory-status', Status);

@@ -53,4 +53,4 @@ export default class LinksWidget extends DashboardWidget {
   }
 }
 
-customElements.define('k-pi-widget', LinksWidget);
+customElements.define('k-products-inventory-widget', LinksWidget);

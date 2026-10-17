@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { linksFor, perUnit, materialsFor, unitsAvailable, productStock, choiceInStock, linkedChoices } from '../server/utils/materials.js';
+import { linksFor, perUnit, materialsFor, unitsAvailable, productQuantity, choiceInStock, linkedChoices } from '../server/utils/materials.js';
 
 const link = (inventoryItemId, quantity, optionKey = '', choiceKey = '') => ({ inventoryItemId, quantity, optionKey, choiceKey });
 
@@ -26,9 +26,9 @@ test('a purchase uses its quantity of each material, across products', () => {
 });
 
 test('the units that can be made are limited by the scarcest material', () => {
-  const stock = new Map([['resin', 1000], ['tpu', 30]]);
-  assert.equal(unitsAvailable([link('resin', 175), link('tpu', 12)], stock), 2);
-  assert.equal(unitsAvailable([link('resin', 175)], stock), 5);
+  const quantity = new Map([['resin', 1000], ['tpu', 30]]);
+  assert.equal(unitsAvailable([link('resin', 175), link('tpu', 12)], quantity), 2);
+  assert.equal(unitsAvailable([link('resin', 175)], quantity), 5);
 });
 
 test('a material that is missing counts as none, and no links means no limit', () => {
@@ -38,19 +38,19 @@ test('a material that is missing counts as none, and no links means no limit', (
 
 test('the example from the design: 300 g of PLA, two products needing 200 g each', () => {
   const pla = [link('pla', 200)];
-  assert.equal(productStock(pla, new Map([['pla', 300]])), 1);
-  assert.equal(productStock(pla, new Map([['pla', 300 - 200]])), 0, 'after one sale both are out');
+  assert.equal(productQuantity(pla, new Map([['pla', 300]])), 1);
+  assert.equal(productQuantity(pla, new Map([['pla', 300 - 200]])), 0, 'after one sale both are out');
 });
 
 test('a product with only choice links has no stock limit of its own', () => {
-  assert.equal(productStock([link('red-paint', 20, 'color', 'red')], new Map()), null);
+  assert.equal(productQuantity([link('red-paint', 20, 'color', 'red')], new Map()), null);
 });
 
 test('a choice is in stock when its paint and the fixed materials can both make one more', () => {
-  const stock = new Map([['resin', 175], ['tpu', 12], ['red-paint', 20], ['blue-paint', 5]]);
-  assert.equal(choiceInStock(car, 'color', 'red', stock), true);
-  assert.equal(choiceInStock(car, 'color', 'blue', stock), false, 'not enough blue paint');
-  assert.equal(choiceInStock(car, 'color', 'red', new Map([...stock, ['resin', 100]])), false, 'not enough resin for any colour');
+  const quantity = new Map([['resin', 175], ['tpu', 12], ['red-paint', 20], ['blue-paint', 5]]);
+  assert.equal(choiceInStock(car, 'color', 'red', quantity), true);
+  assert.equal(choiceInStock(car, 'color', 'blue', quantity), false, 'not enough blue paint');
+  assert.equal(choiceInStock(car, 'color', 'red', new Map([...quantity, ['resin', 100]])), false, 'not enough resin for any colour');
 });
 
 test('a choice sharing an item with the fixed links needs both amounts', () => {

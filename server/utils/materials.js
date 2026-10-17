@@ -36,34 +36,34 @@ export const materialsFor = (lines, linksByProduct) => {
 };
 
 /*
-  How many units the stock can make: the smallest whole number across the items used. `stock` is a
+  How many units the materials can make: the smallest whole number across the items used. `onHand` is a
   Map of item id -> quantity on hand; an item missing from it counts as none. With no links
   there is no limit (Infinity).
 */
-export const unitsAvailable = (links, stock) => {
+export const unitsAvailable = (links, onHand) => {
   let units = Infinity;
   for(const [itemId, quantity] of perUnit(links)){
     if(quantity <= 0) continue;
-    units = Math.min(units, Math.floor((stock.get(itemId) ?? 0) / quantity));
+    units = Math.min(units, Math.floor((onHand.get(itemId) ?? 0) / quantity));
   }
   return units;
 };
 
 /*
-  The stock a product should show, from its fixed links: how many can be made, or null when no
-  fixed link limits it (leave its stock alone).
+  The quantity a product should show, from its fixed links: how many can be made, or null when no
+  fixed link limits it (leave its quantity alone).
 */
-export const productStock = (links, stock) => {
+export const productQuantity = (links, onHand) => {
   const fixed = fixedLinks(links);
-  return fixed.length ? unitsAvailable(fixed, stock) : null;
+  return fixed.length ? unitsAvailable(fixed, onHand) : null;
 };
 
 /*
   Whether one more unit can be made with a given choice: the fixed links and the choice's own, taken
   together, because they may share an item (resin for the body and for a coloured part).
 */
-export const choiceInStock = (links, optionKey, choiceKey, stock) =>
-  unitsAvailable([...fixedLinks(links), ...choiceLinks(links, optionKey, choiceKey)], stock) >= 1;
+export const choiceInStock = (links, optionKey, choiceKey, onHand) =>
+  unitsAvailable([...fixedLinks(links), ...choiceLinks(links, optionKey, choiceKey)], onHand) >= 1;
 
 /* The (optionKey, choiceKey) pairs that have links, with no repeats. */
 export const linkedChoices = links => {

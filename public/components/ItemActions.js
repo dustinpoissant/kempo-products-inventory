@@ -76,4 +76,4 @@ export default class ItemActions extends ShadowComponent {
   }
 }
 
-customElements.define('k-pi-item-actions', ItemActions);
+customElements.define('k-products-inventory-item-actions', ItemActions);

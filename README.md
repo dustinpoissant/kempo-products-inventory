@@ -22,27 +22,27 @@ You tell it what a product is made from. Open a product in **Products** and use 
 
 Then, with no further setup:
 
-- **Selling takes the materials.** When a purchase is recorded in kempo-products, 175 g of resin, 12 g of TPU and 20 ml of the colour that was bought are taken from inventory, all together or not at all. Each inventory movement carries the order reference.
-- **Stock follows the materials.** Each product's stock is how many can be made from what is on hand, limited by the scarcest material. A colour is marked sold out when there is not enough of its paint for one more.
+- **Selling takes the materials.** When a sale is about to be added to kempo-products' ledger (an entry that takes quantity from a linked product), 175 g of resin, 12 g of TPU and 20 ml of the colour that was bought are taken from inventory, all together or not at all. When they are not there the entry is refused, so a linked product can never be oversold. Each inventory movement carries the order reference.
+- **Quantity follows the materials.** Each product's quantity is how many can be made from what is on hand, limited by the scarcest material. A colour is marked sold out when there is not enough of its paint for one more.
 - **Products that share materials stay honest.** With 300 g of PLA and two products that each need 200 g, selling one leaves 100 g and **both** go out of stock.
 - **Restocking brings them back.** Receiving resin in the inventory, or correcting a count there, updates every product made from it straight away.
-- **Reversing a purchase puts back exactly what it took**, even if the materials were edited since.
+- **An entry that puts a sale back returns exactly what it took**, even if the materials were edited since. A cancelled order is an entry with `undoes` set to the sale's `ref`.
 
-Inventory counts whole numbers with no unit, so keep stock in grams and millilitres (175 g, not 0.175 kg).
+Inventory counts whole numbers with no unit, so keep quantity in grams and millilitres (175 g, not 0.175 kg).
 
 ### Selling a piece you already made
 
-Open the item in the inventory admin and choose **Make product from this item**. The new product form opens with the name filled in and the item already listed as its material, one for one, so its stock is the item's quantity. Fill in the price and the rest, and save.
+Open the item in the inventory admin and choose **Make product from this item**. The new product form opens with the name filled in and the item already listed as its material, one for one, so its quantity is the item's quantity. Fill in the price and the rest, and save.
 
-### When the stock the system believed was wrong
+### When the quantity the system believed was wrong
 
-Normally nothing goes wrong, because products refuse to sell more than they think they can make. But if stock was changed behind the system's back, for instance directly in the database, the materials for a purchase may not be there. The purchase stands (it already happened); the connector records a **problem** on the **Product Stock** admin page, with the order reference, and recalculates the affected products so they show what is really left. **Recalculate everything** on that page is the repair tool.
+Normally nothing goes wrong, because a sale of a linked product is answered here first. If quantity was changed behind the system's back, for instance directly in the database, and the materials are not there, **the entry is refused** with inventory's message ("Insufficient quantity of Resin") and the affected products are recalculated so they show what is really left. A **problem** is only recorded on the **Product Quantity** admin page, with the order reference, when materials cannot be put back for something that already stands, such as the undoing of a sale. **Recalculate everything** on that page is the repair tool.
 
 An inventory item that products are made from cannot be deleted until it is removed from them.
 
-## Stock is managed for you
+## Quantity is managed for you
 
-A product made from inventory is marked as maintained by this extension. Its stock and which colours are in stock show as read-only in the products admin, so an edit there cannot be silently overwritten. To change a product's stock, change the inventory it is made from, or remove its materials to hand it back.
+A product made from inventory is marked as maintained by this extension. Its quantity and which colours are in stock show as read-only in the products admin, so an edit there cannot be silently overwritten. To change a product's quantity, change the inventory it is made from, or remove its materials to hand it back. The lock lasts only while this extension is installed and enabled: disable or uninstall it and its products are people's again, and enable it and it takes them back. kempo-products never writes a linked product's quantity itself; every ledger entry for one goes through inventory first, and adding to one without saying which sale it puts back is refused.
 
 ## Install
 
@@ -56,13 +56,13 @@ Install it from **Admin > Extensions** once kempo-products and kempo-inventory a
 
 | It listens to | And |
 |---|---|
-| `kempo-products:purchase:recorded` | takes the materials out of inventory in one atomic call |
-| `kempo-products:purchase:reversed` | puts back what that purchase took |
-| `kempo-inventory:stock:adjusted` | recalculates every product made from that item |
+| `kempo-products:ledger:before_add` | takes the materials a sale uses out of inventory in one atomic call, or refuses the entry when they are not there; puts back what an entry's `undoes` took |
+| `kempo-products:ledger:add_failed` | gives back what was taken for an entry that then failed |
+| `kempo-inventory:quantity:adjusted` | recalculates every product made from that item |
 | `kempo-products:product:deleted` | forgets what the product was made from |
 | `kempo-inventory:item:before_delete` | refuses while products are made from the item |
 
-It reaches the other extensions only through their SDKs (`setStock`, `setManagedBy` and `setChoiceAvailability` from kempo-products; `adjustStockMany` from kempo-inventory) and adds three pieces of interface through extension points those extensions provide: the **Made from** tab on a product's form (global content pushed into kempo-products' `products-admin-product-tabs` location), the **Make product from this item** panel on an inventory item's page, and a **Product Stock** page.
+It reaches the other extensions only through their SDKs (`setQuantity`, `setManagedBy` and `setChoiceAvailability` from kempo-products; `adjustQuantityMany` from kempo-inventory) and adds three pieces of interface through extension points those extensions provide: the **Made from** tab on a product's form (global content pushed into kempo-products' `products-admin-product-tabs` location), the **Make product from this item** panel on an inventory item's page, and a **Product Quantity** page.
 
 ## API
 
@@ -70,7 +70,7 @@ JSON routes under `/products-inventory/api/`. They need the products and invento
 
 | Route | Purpose |
 |---|---|
-| `GET links` | Everything linked (`?productId=` or `?inventoryItemId=` narrows it), with names and stock |
+| `GET links` | Everything linked (`?productId=` or `?inventoryItemId=` narrows it), with names and quantity |
 | `PUT links` | Replace what a product is made from: `{ productId, links: [{ inventoryItemId, quantity, optionKey?, choiceKey? }] }` |
 | `POST recalculate` | Recalculate every linked product |
 | `GET problems`, `DELETE problems/<id>` | What needs attention, and dismissing it |
@@ -84,10 +84,10 @@ DATABASE_URL=postgresql://kempo:kempo@localhost:5444/kempo_products_inventory_te
 DATABASE_URL=postgresql://kempo:kempo@localhost:5444/kempo_products_inventory_test npm test
 ```
 
-The database tests run the whole chain with the real hooks registered: a purchase in kempo-products takes materials out of kempo-inventory, and products made from them follow. They skip themselves when no database is reachable and refuse to run unless its name ends in `_test`. **A green run with `SKIPPED` did not test the database.**
+The database tests run the whole chain with the real hooks registered: a sale added to the ledger in kempo-products takes materials out of kempo-inventory, and products made from them follow. They skip themselves when no database is reachable and refuse to run unless its name ends in `_test`. **A green run with `SKIPPED` did not test the database.**
 
 The documentation site is written in `docs-src/` and built into `docs/` for GitHub Pages. Edit `docs-src/`, never `docs/`, then run `npm run docs:build` (`npm run docs:dev` serves it on port 4051). Screenshots come in pairs: write `<img src="./media/name.png" ...>` in a page, and put `name-light.png` and `name-dark.png` in `docs-src/media`. The build turns the tag into both images and the site shows the one matching the visitor's theme.
 
 ## Dashboard widget
 
-Adds a **Product stock sync** widget to the kempo admin dashboard showing whether product availability matches inventory, listing any problems, with a **Recalculate** button. It is declared in `widgets` in `kempo-config.json` and registered when the extension is installed or updated; people only see it if they hold its permission, and can hide, reorder or resize it from the dashboard's Customize dialog. Needs a kempo with the dashboard (see kempo's `docs/dashboard.md`); on an older kempo the entry is ignored.
+Adds a **Product quantity sync** widget to the kempo admin dashboard showing whether product availability matches inventory, listing any problems, with a **Recalculate** button. It is declared in `widgets` in `kempo-config.json` and registered when the extension is installed or updated; people only see it if they hold its permission, and can hide, reorder or resize it from the dashboard's Customize dialog. Needs a kempo with the dashboard (see kempo's `docs/dashboard.md`); on an older kempo the entry is ignored.

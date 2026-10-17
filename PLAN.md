@@ -67,7 +67,7 @@ kempo-products (in its plan): `purchase:recorded`, `purchase:reversed`, `setStoc
 kempo-inventory (to build, as small generic primitives, not product features):
 
 1. **`adjustStockMany`**: apply several stock changes in one transaction, all or nothing, with a shared reference. Today `adjustStock` runs one transaction per item, so a recipe can't be deducted atomically.
-2. **An extension fragment on the item page** (`inventory-item-actions`), for extension actions. Both are built, in the kempo-inventory repo, and kempo-products gained tabs on its form, a `products-admin-product-tabs` location for extensions to push a <k-prod-tab> into, and the `product-saved`/`draft-change` events.
+2. **An extension fragment on the item page** (`inventory-item-actions`), for extension actions. Both are built, in the kempo-inventory repo, and kempo-products gained tabs on its form, a `products-admin-product-tabs` location for extensions to push a <k-products-tab> into, and the `product-saved`/`draft-change` events.
 
 Reservations (holding stock between order and build) are deliberately not needed.
 

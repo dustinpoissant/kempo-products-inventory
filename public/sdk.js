@@ -18,7 +18,7 @@ const req = async (method, path, data) => {
 
 /*
   What a product is made from, or what uses an inventory item. Resolves to
-  { links, products, items }: the links, and the names and stock to show them with.
+  { links, products, items }: the links, and the names and quantity to show them with.
 */
 export const getLinksForProduct = productId => req('GET', `${BASE}/links?productId=${encodeURIComponent(productId)}`);
 export const getLinksForItem = inventoryItemId => req('GET', `${BASE}/links?inventoryItemId=${encodeURIComponent(inventoryItemId)}`);

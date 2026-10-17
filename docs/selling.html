@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Selling - Kempo Products Inventory</title>
-  <meta name="description" content="Connects kempo-products to kempo-inventory: selling a product uses up the materials it is made from, and stock follows what is on the shelf." />
+  <meta name="description" content="Connects kempo-products to kempo-inventory: selling a product uses up the materials it is made from, and quantity follows what is on the shelf." />
   <link rel="icon" type="image/svg+xml" href="./media/icon.svg" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/kempo-css@2/dist/kempo.min.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/kempo-css@2/dist/kempo-hljs.min.css" />
@@ -73,20 +73,20 @@
         <a href="./made-from.html#choices" class="d-b">Only with one choice</a>
         <a href="./made-from.html#units" class="d-b">Units</a>
         <a href="./made-from.html#from-item" class="d-b">Make product from an item</a>
-        <a href="./made-from.html#stock-managed" class="d-b">Stock is managed for you</a>
+        <a href="./made-from.html#quantity-managed" class="d-b">Quantity is managed for you</a>
       </div>
       <h5><a href="./selling.html">Selling</a></h5>
       <div class="ml mb -mt">
         <a href="./selling.html#selling" class="d-b">Selling takes the materials</a>
-        <a href="./selling.html#stock-follows" class="d-b">Stock follows the materials</a>
+        <a href="./selling.html#quantity-follows" class="d-b">Quantity follows the materials</a>
         <a href="./selling.html#shared" class="d-b">Shared materials</a>
         <a href="./selling.html#restocking" class="d-b">Restocking</a>
-        <a href="./selling.html#reversing" class="d-b">Reversing a purchase</a>
+        <a href="./selling.html#reversing" class="d-b">Putting a sale back</a>
       </div>
       <h5><a href="./problems.html">When something is wrong</a></h5>
       <div class="ml mb -mt">
         <a href="./problems.html#when" class="d-b">When it happens</a>
-        <a href="./problems.html#page" class="d-b">The Product Stock page</a>
+        <a href="./problems.html#page" class="d-b">The Product Quantity page</a>
         <a href="./problems.html#deletes" class="d-b">Deleting an item</a>
         <a href="./problems.html#repair" class="d-b">Repairing</a>
       </div>
@@ -125,19 +125,19 @@
     <h1>Selling</h1>
     
     <h2 id="selling">Selling takes the materials</h2>
-    <p>When a purchase is recorded in kempo-products, this extension takes every material the product uses out of inventory in <strong>one atomic call</strong>. Either all of them are taken or none are, so a sale never takes the resin and then finds the paint short.</p>
+    <p>When a sale is added to kempo-products' ledger (an entry that takes quantity from a linked product), this extension takes every material the product uses out of inventory in <strong>one atomic call</strong>. Either all of them are taken or none are, so a sale never takes the resin and then finds the paint short.</p>
     <ul>
-      <li>The amount is the per-unit amount times the quantity bought, for the materials that match the choices bought.</li>
+      <li>The amount is the per-unit amount times the quantity sold, for the materials that match the choices sold (the line's <code>options</code>).</li>
       <li>Every inventory movement carries the order reference, written into its note, so you can find what an order took.</li>
-      <li>kempo-products records a purchase once per reference, so recording the same one again does not take anything twice.</li>
+      <li>An entry is added once per reference, so adding the same one again does not take anything twice. If any material is short the entry is refused and nothing is taken.</li>
     </ul>
 
-    <h2 id="stock-follows" class="mt">Stock follows the materials</h2>
-    <p>A linked product's stock is <strong>how many can be made from what is on hand</strong>: for each material, the quantity in inventory divided by the amount per unit, rounded down, and the smallest of those numbers wins. The scarcest material limits the product.</p>
+    <h2 id="quantity-follows" class="mt">Quantity follows the materials</h2>
+    <p>A linked product's quantity is <strong>how many can be made from what is on hand</strong>: for each material, the quantity in inventory divided by the amount per unit, rounded down, and the smallest of those numbers wins. The scarcest material limits the product.</p>
     <div class="mb">
-      <img src="./media/admin-product-stock-light.png" alt="The Product Stock admin page: a table of products with the inventory items they are made from, how many can be made, and what limits them." class="img-light full b r" />
-      <img src="./media/admin-product-stock-dark.png" alt="The Product Stock admin page: a table of products with the inventory items they are made from, how many can be made, and what limits them." class="img-dark full b r" />
-      <small class="d-b tc-muted">The Product Stock page lists every linked product and what limits it.</small>
+      <img src="./media/admin-product-stock-light.png" alt="The Product Quantity admin page: a table of products with the inventory items they are made from, how many can be made, and what limits them." class="img-light full b r" />
+      <img src="./media/admin-product-stock-dark.png" alt="The Product Quantity admin page: a table of products with the inventory items they are made from, how many can be made, and what limits them." class="img-dark full b r" />
+      <small class="d-b tc-muted">The Product Quantity page lists every linked product and what limits it.</small>
     </div>
     <p>Choices are worked out the same way: a colour is <strong>marked sold out</strong> when there is not enough of the materials it needs for one more.</p>
 
@@ -147,8 +147,8 @@
     <h2 id="restocking" class="mt">Restocking</h2>
     <p>Receiving resin in the inventory, or correcting a count, recalculates every product made from that item straight away. A product that was out of stock comes back, with no action in the products admin.</p>
 
-    <h2 id="reversing" class="mt">Reversing a purchase</h2>
-    <p>When a purchase is reversed (a refund or a cancelled order), exactly what it took is put back. The extension remembers the amounts it took for each purchase, so the reversal is correct <strong>even if the links were edited since</strong>. Reversing twice puts back once.</p>
+    <h2 id="reversing" class="mt">Putting a sale back</h2>
+    <p>When an entry that puts a sale back is added (a refund or a cancelled order: <code>undoes</code> is the sale's reference), exactly what the sale took is put back. The extension remembers the amounts it took for each reference, so it is correct <strong>even if the links were edited since</strong>. Putting back twice puts back once. Adding to a linked product without saying which sale it undoes is refused, because its quantity follows the materials.</p>
   
     <hr />
     <p class="tc-muted small">kempo-products-inventory is open source under the MIT license. <a href="https://github.com/dustinpoissant/kempo-products-inventory" target="_blank">View it on GitHub</a>, or <a href="https://github.com/dustinpoissant/kempo-products-inventory/issues" target="_blank">report a problem</a>.</p>

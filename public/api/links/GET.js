@@ -5,7 +5,7 @@ import { getItems } from 'kempo-inventory/sdk';
 
 /*
   ?productId= is what one product is made from; ?inventoryItemId= is what uses one inventory item;
-  with neither it is every link. All come back with the names and current stock needed to show them.
+  with neither it is every link. All come back with the names and current quantity needed to show them.
 */
 export default async (request, response) => {
   const [authError] = await authorize(request, ['products:read', 'kempo-inventory:items:read']);
@@ -21,7 +21,7 @@ export default async (request, response) => {
   const [, items] = await getItems({ ids: itemIds, limit: Math.max(itemIds.length, 1) });
   response.json({
     links,
-    products: Object.fromEntries((products?.items ?? []).map(product => [product.id, { id: product.id, name: product.name, slug: product.slug, stock: product.stock }])),
+    products: Object.fromEntries((products?.items ?? []).map(product => [product.id, { id: product.id, name: product.name, slug: product.slug, quantity: product.quantity }])),
     items: Object.fromEntries((items?.items ?? []).map(item => [item.id, { id: item.id, sku: item.sku, name: item.name, quantity: item.quantity }])),
   });
 };

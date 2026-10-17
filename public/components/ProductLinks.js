@@ -14,10 +14,10 @@ import { getLinksForProduct, saveLinks } from '/products-inventory/sdk.js';
   materials go out of stock when there is no longer enough for another.
 
   A material can be tied to one choice of an option ("Red" uses red paint), so the paint taken is
-  the colour that was bought. Amounts are whole numbers in the item's own unit, so keep stock in
+  the colour that was bought. Amounts are whole numbers in the item's own unit, so keep quantity in
   grams or millilitres.
 
-  It is the "Made from" tab of the product form (a <k-prod-tab>, see the kempo-products form) and saves with it: when
+  It is the "Made from" tab of the product form (a <k-products-tab>, see the kempo-products form) and saves with it: when
   the form fires `product-saved` this saves the materials too. From the address it reads ?id= (the
   product being edited) and ?fromInventoryItem= (an item to start with, from "Make product from this
   item").
@@ -26,7 +26,7 @@ export default class ProductLinks extends ShadowComponent {
   static properties = {
     rows: { state: true },
     options: { state: true },
-    stock: { state: true },
+    quantity: { state: true },
     loading: { state: true },
     error: { state: true },
   };
@@ -35,7 +35,7 @@ export default class ProductLinks extends ShadowComponent {
     super();
     this.rows = [];
     this.options = [];
-    this.stock = {};
+    this.quantity = {};
     this.loading = true;
     this.error = '';
     this.productId = '';
@@ -48,7 +48,7 @@ export default class ProductLinks extends ShadowComponent {
   */
   connectedCallback(){
     super.connectedCallback();
-    this.form = this.closest('k-prod-form');
+    this.form = this.closest('k-products-form');
     this.form?.addEventListener('draft-change', this.handleDraft);
     this.form?.addEventListener('product-saved', this.handleSaved);
     this.load();
@@ -68,7 +68,7 @@ export default class ProductLinks extends ShadowComponent {
     const id = params.get('id');
     const from = params.get('fromInventoryItem');
     const rows = [];
-    const stock = {};
+    const quantity = {};
 
     if(id){
       const [error, data] = await getProduct(id);
@@ -87,20 +87,20 @@ export default class ProductLinks extends ShadowComponent {
       }
       for(const link of linked.links){
         const item = linked.items[link.inventoryItemId];
-        stock[link.inventoryItemId] = item?.quantity;
+        quantity[link.inventoryItemId] = item?.quantity;
         rows.push({ itemId: link.inventoryItemId, label: item ? `${item.name} (${item.sku})` : '(deleted item)', quantity: String(link.quantity), choice: link.optionKey ? `${link.optionKey}/${link.choiceKey}` : '' });
       }
     }
     if(from && !rows.some(row => row.itemId === from && !row.choice)){
       const [error, data] = await getItem(from);
       if(!error){
-        stock[from] = data.item.quantity;
+        quantity[from] = data.item.quantity;
         rows.push({ itemId: from, label: `${data.item.name} (${data.item.sku})`, quantity: '1', choice: '' });
         this.touched = true;
       }
     }
     this.rows = rows;
-    this.stock = stock;
+    this.quantity = quantity;
     this.loading = false;
   };
 
@@ -149,7 +149,7 @@ export default class ProductLinks extends ShadowComponent {
     const [error, data] = await getItems({ q: event.detail.value, limit: 10 });
     if(error) return;
     $combobox.setOptions(data.items.map(item => ({ label: `${item.name} (${item.sku})`, value: item.id })));
-    this.stock = { ...this.stock, ...Object.fromEntries(data.items.map(item => [item.id, item.quantity])) };
+    this.quantity = { ...this.quantity, ...Object.fromEntries(data.items.map(item => [item.id, item.quantity])) };
   };
 
   select = (event, index) => {
@@ -164,7 +164,7 @@ export default class ProductLinks extends ShadowComponent {
   }
 
   renderRow(row, index){
-    const quantity = this.stock[row.itemId];
+    const quantity = this.quantity[row.itemId];
     return html`<div class="d-f mbh" style="align-items: flex-start; gap: var(--spacer_h);">
       <div class="flex" style="min-width: 14rem;">
         <k-combobox class="full" placeholder="Search inventory…" aria-label="Material" .value=${row.label}
@@ -195,4 +195,4 @@ export default class ProductLinks extends ShadowComponent {
   }
 }
 
-customElements.define('k-pi-links', ProductLinks);
+customElements.define('k-products-inventory-links', ProductLinks);
