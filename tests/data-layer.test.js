@@ -46,7 +46,7 @@ const HOOKS = {
 };
 
 /* The other extensions' tables are emptied by name: they are reached through their SDKs everywhere else. */
-const FOREIGN_TABLES = ['kempoProductLedger', 'kempoProductOption', 'kempoProduct', 'kempoProductField', 'kempoProductType', 'kempoInventoryMovement', 'kempoInventoryItem'];
+const FOREIGN_TABLES = ['kempoProductLedger', 'kempoProductOption', 'kempoProduct', 'kempoProductAttribute', 'kempoProductTemplate', 'kempoInventoryMovement', 'kempoInventoryItem'];
 
 const purge = async () => {
   for(const table of [kempoProductInventoryDeduction, kempoProductInventoryProblem, kempoProductInventoryLink]) await db.delete(table);
