@@ -3,7 +3,7 @@
   "version": "0.2.0",
   "description": "Connects kempo-products to kempo-inventory: selling a product uses up the raw materials it is made from",
   "license": "MIT",
-  "author": "Dustin Poissant",
+  "author": "Dustin Poissant <dustinpoissant@gmail.com>",
   "type": "module",
   "scripts": {
     "test": "node scripts/run-tests.js unit node --test --test-concurrency=1",
