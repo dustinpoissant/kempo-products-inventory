@@ -3,6 +3,7 @@ import { html } from '/kempo-ui/lit-all.min.js';
 import Toast from '/kempo-ui/components/Toast.js';
 import '/kempo-ui/components/Icon.js';
 import '/kempo-ui/components/Spinner.js';
+import '/kempo-ui/components/Table.js';
 import { getLinksForProduct, recalculateAll, getProblems, dismissProblem } from '/products-inventory/sdk.js';
 
 /*
@@ -80,6 +81,36 @@ export default class Status extends ShadowComponent {
   /*
     View
   */
+  /* The products made from inventory, one row each. A row opens the product when it still exists. */
+  madeFromRecords(){
+    const { links, products, items } = this.data;
+    const productIds = [...new Set(links.map(link => link.productId))];
+    return productIds.map(id => {
+      const product = products[id];
+      const mine = links.filter(link => link.productId === id);
+      return {
+        name: product ? product.name : '(deleted product)',
+        canMake: product ? (product.quantity === -1 ? 'Unlimited' : product.quantity) : '',
+        madeFrom: mine.map(link => `${link.quantity} × ${items[link.inventoryItemId]?.name ?? '(deleted item)'}${link.optionKey ? ` (${link.optionKey}: ${link.choiceKey})` : ''}`).join(', '),
+        _url: product ? `/admin/extension/kempo-products/edit?id=${encodeURIComponent(id)}` : undefined,
+      };
+    });
+  }
+
+  updated(changed){
+    super.updated?.(changed);
+    if(!changed.has('data') || !this.data) return;
+    this.renderRoot.querySelector('#madeFromTable')?.setData({
+      records: this.madeFromRecords(),
+      fields: [
+        { name: 'name', label: 'Product', size: 260, editable: false },
+        { name: 'canMake', label: 'Can make', size: 130, editable: false },
+        { name: 'madeFrom', label: 'Made from', editable: false },
+      ],
+    });
+  }
+
+
   render(){
     if(this.loading) return html`<k-spinner></k-spinner>`;
     if(this.error) return html`<p class="tc-danger">${this.error}</p>`;
@@ -97,18 +128,7 @@ export default class Status extends ShadowComponent {
         <p class="flex m0 tc-muted">Products made from inventory take it out when they sell, and show what can still be made.</p>
         <button type="button" class="btn" id="recalculate" ?disabled=${this.busy} @click=${this.recalculate}><k-icon name="repeat"></k-icon> ${this.busy ? 'Recalculating…' : 'Recalculate everything'}</button>
       </div>
-      ${productIds.length ? html`<div class="table-wrapper"><table>
-        <thead><tr><th>Product</th><th>Can make</th><th>Made from</th></tr></thead>
-        <tbody>${productIds.map(id => {
-          const product = products[id];
-          const mine = links.filter(link => link.productId === id);
-          return html`<tr>
-            <td>${product ? html`<a href=${`/admin/extension/kempo-products/edit?id=${encodeURIComponent(id)}`}>${product.name}</a>` : '(deleted product)'}</td>
-            <td>${product ? (product.quantity === -1 ? 'Unlimited' : product.quantity) : ''}</td>
-            <td>${mine.map(link => `${link.quantity} × ${items[link.inventoryItemId]?.name ?? '(deleted item)'}${link.optionKey ? ` (${link.optionKey}: ${link.choiceKey})` : ''}`).join(', ')}</td>
-          </tr>`;
-        })}</tbody>
-      </table></div>` : html`<p class="tc-muted">No product is made from inventory yet. Open a product and add what it is made from, or open an inventory item and choose "Make product from this item".</p>`}
+      ${productIds.length ? html`<k-table id="madeFromTable" open-on-click></k-table>` : html`<p class="tc-muted">No product is made from inventory yet. Open a product and add what it is made from, or open an inventory item and choose "Make product from this item".</p>`}
     </div>`;
   }
 }

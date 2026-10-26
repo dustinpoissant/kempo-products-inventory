@@ -21,7 +21,7 @@
     "url": "git+https://github.com/dustinpoissant/kempo-products-inventory.git"
   },
   "peerDependencies": {
-    "kempo": ">=4.7.0",
+    "kempo": ">=4.9.7",
     "kempo-inventory": ">=0.4.0",
     "kempo-products": ">=0.2.0",
     "kempo-ui": ">=0.6.0"

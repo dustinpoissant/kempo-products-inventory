@@ -33,3 +33,8 @@ Connects kempo-products to kempo-inventory.
 - **Make product from this item** on an inventory item's page starts a product for a piece you already made, linked one for one.
 - A **Product Stock** page lists what is linked, shows what needs attention when materials could not be taken for a purchase that already stands, and can recalculate everything.
 - An inventory item that products are made from cannot be deleted.
+
+## [0.2.1] - 2026-10-26
+### Changed
+- The list of products made from inventory is a kempo-ui table.
+- Requires kempo 4.9.7 (the admin lists use kempo-ui tables).
