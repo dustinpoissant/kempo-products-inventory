@@ -4,6 +4,17 @@ All notable changes to `kempo-products-inventory` are documented in this file.
 
 ## [Unreleased]
 
+### Changed
+
+- **The Stock Levels note is contributed by this extension**, through the `products-admin-stock-notes` location (`admin/stock-notes.global.html`), so it shows only while this extension and kempo-inventory are installed.
+
+
+### Changed
+
+- **Made from is a plain tab** on the product form (`products-admin-product-tabs`), with its own Save button. It saves its own materials; a new product is saved first.
+
+- **The connector's page is a tab on Inventory**, labelled Product Quantity, contributed to the new `inventory-admin-tabs` location. Its own page (`/admin/extension/kempo-products-inventory/`) and its menu entry are removed, with no redirect.
+
 ### Changed (breaking)
 
 - **It answers the ledger, not purchases and holds.** kempo-products no longer has purchases or holds; every change to a quantity is an entry in its ledger. A sale of a linked product (an entry that takes quantity) is answered through `kempo-products:ledger:before_add`: the materials are taken from inventory all together or not at all, and the entry is refused with inventory's message when they are not there. An entry that puts a sale back (`undoes`) returns exactly what that one took; adding to a linked product any other way is refused, because its quantity follows the materials. `kempo-products:ledger:add_failed` gives back what was taken for an entry that then failed. The hooks for `purchase:before_record`, `purchase:reversed`, `hold:before_create`, `hold:committed`, `hold:released` and `quantity:take_failed` are gone, and so is the `kempoProductInventoryHold` table (existing rows are left unused). Materials are taken when the order is placed, not set aside and consumed later, so what a pending order has taken is gone from inventory until it is put back. Needs the kempo-products that has the ledger.
